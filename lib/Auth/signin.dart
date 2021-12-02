@@ -1,17 +1,19 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:dokan/app_propertice.dart';
+import 'package:dokan/Properties/app_properties.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class SingupPage extends StatefulWidget {
-  const SingupPage({Key? key}) : super(key: key);
+import 'signup.dart';
+
+class SinginPage extends StatefulWidget {
+  const SinginPage({Key? key}) : super(key: key);
 
   @override
-  State<SingupPage> createState() => _SingupPageState();
+  State<SinginPage> createState() => _SinginPageState();
 }
 
-class _SingupPageState extends State<SingupPage> {
+class _SinginPageState extends State<SinginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,9 +35,8 @@ class _SingupPageState extends State<SingupPage> {
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(30, 0, 30, 50),
                     child: Text(
-                      'Sign Up',
-                      style:
-                          TextStyle(fontSize: 35, color: AppColor.appSecColor),
+                      'Sign In',
+                      style: TextStyle(fontSize: 35, color: Colors.white),
                     ),
                   ),
                 ),
@@ -56,68 +57,20 @@ class _SingupPageState extends State<SingupPage> {
                       padding: const EdgeInsets.fromLTRB(15, 30, 30, 30),
                       child: ListTile(
                         title: Text(
-                          'Welcome Buddy !',
+                          'Welcome Back !',
                           style: TextStyle(
                             fontSize: 30,
                             color: AppColor.appMainColor,
                           ),
                         ),
                         subtitle: Text(
-                          'Sign Up and enjoy',
+                          'Great to see you back !',
                           style: TextStyle(
                             fontSize: 22,
                             color: Colors.grey,
                           ),
                         ),
                       ),
-                    ),
-                    Row(
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                            child: Container(
-                              height: 60,
-                              width: 60,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColor.appMainColor,
-                              ),
-                              child: Icon(
-                                Icons.person_outline,
-                                size: 30,
-                                color: AppColor.appSecColor,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
-                            child: TextField(
-                              style: TextStyle(fontSize: 25),
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration(
-                                hintText: 'NAME',
-                                hintStyle: TextStyle(
-                                    fontSize: 20, color: Colors.red[200]),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.grey, width: 2),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.red.shade400, width: 2),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 30,
                     ),
                     Row(
                       children: [
@@ -149,14 +102,15 @@ class _SingupPageState extends State<SingupPage> {
                               decoration: InputDecoration(
                                 hintText: 'EMAIL',
                                 hintStyle: TextStyle(
-                                    fontSize: 20, color: Colors.red[200]),
+                                    fontSize: 20, color: Colors.redAccent[200]),
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Colors.grey, width: 2),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Colors.red.shade400, width: 2),
+                                      color: Colors.redAccent.shade400,
+                                      width: 2),
                                 ),
                               ),
                             ),
@@ -197,7 +151,7 @@ class _SingupPageState extends State<SingupPage> {
                               decoration: InputDecoration(
                                 hintText: 'PASSWORD',
                                 hintStyle: TextStyle(
-                                    fontSize: 20, color: Colors.red[200]),
+                                    fontSize: 20, color: Colors.redAccent[200]),
                                 suffixIcon: Icon(
                                   Icons.visibility,
                                   color: AppColor.appMainColor,
@@ -208,59 +162,8 @@ class _SingupPageState extends State<SingupPage> {
                                 ),
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Colors.red.shade400, width: 2),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Row(
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                            child: Container(
-                              height: 60,
-                              width: 60,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColor.appMainColor,
-                              ),
-                              child: Icon(
-                                Icons.lock_outline,
-                                size: 30,
-                                color: AppColor.appSecColor,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
-                            child: TextField(
-                              style: TextStyle(fontSize: 25),
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                hintText: 'CONFIRM PASSWORD',
-                                hintStyle: TextStyle(
-                                    fontSize: 20, color: Colors.red[200]),
-                                suffixIcon: Icon(
-                                  Icons.visibility,
-                                  color: AppColor.appMainColor,
-                                ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.grey, width: 2),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.red.shade400, width: 2),
+                                      color: Colors.redAccent.shade400,
+                                      width: 2),
                                 ),
                               ),
                             ),
@@ -280,7 +183,7 @@ class _SingupPageState extends State<SingupPage> {
                       ),
                       onPressed: () {},
                       child: Text(
-                        'Confirm',
+                        'Continue',
                         style: TextStyle(
                           fontSize: 28,
                         ),
@@ -294,17 +197,22 @@ class _SingupPageState extends State<SingupPage> {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: 'Alredy have an account? ',
+                                text: 'Don\'t have an account? ',
                                 style: TextStyle(color: Colors.grey),
                               ),
                               TextSpan(
-                                text: 'Sign In',
+                                text: 'Sign Up',
                                 style: TextStyle(
                                   color: AppColor.appMainColor,
                                 ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SingupPage(),
+                                      ),
+                                    );
                                   },
                               ),
                             ],
