@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:dokan/Properties/app_properties.dart';
 import 'package:flutter/material.dart';
 
 import '../Auth/signin.dart';
@@ -34,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.redAccent[400],
+      backgroundColor: AppColor.appSecColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -45,14 +46,14 @@ class _SplashScreenState extends State<SplashScreen> {
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                    color: AppColor.appMainColor),
               ),
             ),
             SizedBox(
               height: 30,
             ),
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColor.appMainColor),
             )
           ],
         ),
