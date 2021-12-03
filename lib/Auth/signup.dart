@@ -19,26 +19,25 @@ class _SingupPageState extends State<SingupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.appSecColor,
-      body: Column(
-        children: [
-          SizedBox(
-            height: 250,
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: const EdgeInsets.all(30),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Sign Up',
-                  style: AllTextStyle.headerStyle,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 250,
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.all(30),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Sign Up',
+                    style: AllTextStyle.headerStyle,
+                  ),
                 ),
               ),
             ),
-          ),
-//-----------------------------------------------------------------
-          Expanded(
-            flex: 3,
-            child: Padding(
+            //-----------------------------------------------------------------
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: Column(
                 // mainAxisAlignment: MainAxisAlignment.start,
@@ -84,14 +83,15 @@ class _SingupPageState extends State<SingupPage> {
                   Divider(
                     height: 10,
                   ),
-//-----------------------------------------------------------------
                 ],
               ),
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Column(
+            //-----------------------------------------------------------------
+            Divider(
+              height: 150,
+            ),
+
+            Column(
               children: [
                 PrimaryButton(
                   buttonText: 'Sign Up',
@@ -100,12 +100,12 @@ class _SingupPageState extends State<SingupPage> {
                     MaterialPageRoute(builder: (context) => Homepage()),
                   ),
                 ),
-//-----------------------------------------------------------------
+                //-----------------------------------------------------------------
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   child: Richtexts(
-                    firstText: 'Don\'t have an account? ',
-                    secText: 'Sign Up',
+                    firstText: 'Already have an account? ',
+                    secText: 'Sign In',
                     roughtpage: () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -115,9 +115,9 @@ class _SingupPageState extends State<SingupPage> {
                   ),
                 ),
               ],
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

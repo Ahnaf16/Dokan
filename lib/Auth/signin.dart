@@ -19,26 +19,25 @@ class _SinginPageState extends State<SinginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.appSecColor,
-      body: Column(
-        children: [
-          SizedBox(
-            height: 250,
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: const EdgeInsets.all(30),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Sign In',
-                  style: AllTextStyle.headerStyle,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 250,
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.all(30),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Sign In',
+                    style: AllTextStyle.headerStyle,
+                  ),
                 ),
               ),
             ),
-          ),
-//-----------------------------------------------------------------
-          Expanded(
-            flex: 3,
-            child: Padding(
+            //-----------------------------------------------------------------
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: Column(
                 // mainAxisAlignment: MainAxisAlignment.start,
@@ -64,7 +63,7 @@ class _SinginPageState extends State<SinginPage> {
                   Divider(
                     height: 10,
                   ),
-//-----------------------------------------------------------------
+                  //-----------------------------------------------------------------
                   Richtexts(
                     firstText: '',
                     secText: 'Forget Password?',
@@ -78,10 +77,10 @@ class _SinginPageState extends State<SinginPage> {
                 ],
               ),
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Column(
+            Divider(
+              height: 300,
+            ),
+            Column(
               children: [
                 PrimaryButton(
                   buttonText: 'Sign In',
@@ -90,7 +89,8 @@ class _SinginPageState extends State<SinginPage> {
                     MaterialPageRoute(builder: (context) => Homepage()),
                   ),
                 ),
-//-----------------------------------------------------------------
+                //-----------------------------------------------------------------
+
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   child: Richtexts(
@@ -105,9 +105,9 @@ class _SinginPageState extends State<SinginPage> {
                   ),
                 ),
               ],
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
