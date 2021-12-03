@@ -15,7 +15,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.appSecColor,
+      backgroundColor: AppColor.appBackground,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
@@ -24,8 +24,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             color: AppColor.appMainColor,
           ),
         ),
-        backgroundColor: AppColor.appSecColor,
-        shadowColor: AppColor.appSecColor,
+        backgroundColor: AppColor.appBackground,
+        shadowColor: AppColor.appBackground,
         elevation: 0,
       ),
 //-----------------------------------------------------------------

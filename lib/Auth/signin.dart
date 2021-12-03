@@ -18,7 +18,7 @@ class _SinginPageState extends State<SinginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.appSecColor,
+      backgroundColor: AppColor.appBackground,
       body: SingleChildScrollView(
         child: Column(
           children: [
