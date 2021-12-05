@@ -1,10 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:dokan/Auth/forgetpass.dart';
+import 'package:dokan/Auth/userform.dart';
 import 'package:dokan/Properties/app_properties.dart';
 import 'package:dokan/Properties/components.dart';
 import 'package:dokan/Screen/homepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'signup.dart';
 
 class SinginPage extends StatefulWidget {
@@ -15,6 +18,32 @@ class SinginPage extends StatefulWidget {
 }
 
 class _SinginPageState extends State<SinginPage> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  signIn() async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      var authCredential = userCredential.user;
+      print(authCredential!.uid);
+      if (authCredential.uid.isNotEmpty) {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => Homepage()));
+      } else {
+        Fluttertoast.showToast(msg: 'Something is Wrong');
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        Fluttertoast.showToast(msg: 'No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        Fluttertoast.showToast(msg: 'Wrong password provided for that user.');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,9 +78,11 @@ class _SinginPageState extends State<SinginPage> {
                   Textfields(
                       isPassword: false,
                       needSaffixIcon: false,
-                      inputTypes: TextInputType.emailAddress),
+                      inputTypes: TextInputType.emailAddress,
+                      textControl: _emailController),
                   Divider(
                     height: 10,
+                    color: Colors.transparent,
                   ),
                   TextfieldHint(
                     hint: 'Password',
@@ -59,8 +90,10 @@ class _SinginPageState extends State<SinginPage> {
                   Textfields(
                       isPassword: true,
                       needSaffixIcon: true,
-                      inputTypes: TextInputType.visiblePassword),
+                      inputTypes: TextInputType.visiblePassword,
+                      textControl: _passwordController),
                   Divider(
+                    color: Colors.transparent,
                     height: 10,
                   ),
                   //-----------------------------------------------------------------
@@ -78,16 +111,14 @@ class _SinginPageState extends State<SinginPage> {
               ),
             ),
             Divider(
+              color: Colors.transparent,
               height: 300,
             ),
             Column(
               children: [
                 PrimaryButton(
                   buttonText: 'Sign In',
-                  gotoPage: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Homepage()),
-                  ),
+                  gotoPage: () => signIn(),
                 ),
                 //-----------------------------------------------------------------
 

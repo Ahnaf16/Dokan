@@ -50,7 +50,7 @@ class Homepage extends StatelessWidget {
                 child: Stack(
                   children: [
                     Align(
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment.center,
                       child: CircleAvatar(
                         radius: 50.0,
                         backgroundColor: Colors.transparent,
@@ -58,14 +58,14 @@ class Homepage extends StatelessWidget {
                       ),
                     ),
                     Align(
-                      alignment: Alignment.centerRight,
+                      alignment: Alignment.bottomCenter,
                       child: Text(
                         'Ahnaf Sakil',
                         style: AllTextStyle.bodyTextStyle,
                       ),
                     ),
                     Align(
-                      alignment: Alignment.centerRight + Alignment(0, .4),
+                      alignment: Alignment.bottomCenter + Alignment(0, .2),
                       child: Text(
                         'ahnafsakil9@gmail.com',
                         style: AllTextStyle.smallTextStyle,

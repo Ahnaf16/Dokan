@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:dokan/Screen/splash.dart';
+import 'package:dokan/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -18,9 +19,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'E-Commerce App',
+      // themeMode: ThemeMode.system,
+      // darkTheme: Mytheme.dark,
+      // theme: Mytheme.light,
       home: SplashScreen(),
     );
   }
 }
-
-//SplashScreen

@@ -12,6 +12,9 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,10 +60,10 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   hint: 'Email',
                 ),
                 Textfields(
-                  isPassword: false,
-                  needSaffixIcon: false,
-                  inputTypes: TextInputType.emailAddress,
-                ),
+                    isPassword: false,
+                    needSaffixIcon: false,
+                    inputTypes: TextInputType.emailAddress,
+                    textControl: _passwordController),
                 Divider(
                   height: 10,
                 ),
