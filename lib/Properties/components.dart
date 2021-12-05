@@ -30,15 +30,18 @@ class Textfields extends StatelessWidget {
     required this.isPassword,
     required this.needSaffixIcon,
     required this.inputTypes,
+    required this.textControl,
   }) : super(key: key);
 
   final bool isPassword;
   final bool needSaffixIcon;
   final TextInputType inputTypes;
+  final TextEditingController textControl;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: textControl,
       style: const TextStyle(
         fontSize: 22,
       ),
