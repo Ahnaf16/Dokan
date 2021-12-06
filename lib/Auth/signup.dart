@@ -1,13 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:dokan/Auth/signin.dart';
 import 'package:dokan/Auth/userform.dart';
 import 'package:dokan/Properties/app_properties.dart';
-import 'package:dokan/Properties/components.dart';
-import 'package:dokan/Screen/homepage.dart';
+import 'package:dokan/Properties/texts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:dokan/Properties/export.dart';
 
 class SingupPage extends StatefulWidget {
   const SingupPage({Key? key}) : super(key: key);
@@ -32,7 +29,8 @@ class _SingupPageState extends State<SingupPage> {
       var authCredential = userCredential.user;
       print(authCredential!.uid);
       if (authCredential.uid.isNotEmpty) {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => UserForm()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => const UserForm()));
       } else {
         Fluttertoast.showToast(msg: 'Something is Wrong');
       }
@@ -58,8 +56,8 @@ class _SingupPageState extends State<SingupPage> {
             SizedBox(
               height: 250,
               width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.all(30),
+              child: const Padding(
+                padding: EdgeInsets.all(30),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -76,7 +74,7 @@ class _SingupPageState extends State<SingupPage> {
                 // mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextfieldHint(
+                  const TextfieldHint(
                     hint: 'User Name',
                   ),
                   // Textfields(
@@ -84,35 +82,44 @@ class _SingupPageState extends State<SingupPage> {
                   //     needSaffixIcon: false,
                   //     inputTypes: TextInputType.emailAddress,
                   //     textControl: _nameController),
-                  Divider(
+                  const Divider(
                     color: Colors.transparent,
                     height: 10,
                   ),
-                  TextfieldHint(
+                  const TextfieldHint(
                     hint: 'Email',
                   ),
+                  // Textfields(
+                  //     isPassword: false,
+                  //     //needSaffixIcon: false,
+                  //     inputTypes: TextInputType.emailAddress,
+                  //     textControl: _emailController),
                   Textfields(
-                      isPassword: false,
-                      needSaffixIcon: false,
-                      inputTypes: TextInputType.emailAddress,
-                      textControl: _emailController),
-                  Divider(
+                    TextInputType.emailAddress,
+                    _emailController,
+                  ),
+                  const Divider(
                     color: Colors.transparent,
                     height: 10,
                   ),
-                  TextfieldHint(
+                  const TextfieldHint(
                     hint: 'Password',
                   ),
-                  Textfields(
-                      isPassword: true,
-                      needSaffixIcon: true,
-                      inputTypes: TextInputType.visiblePassword,
-                      textControl: _passwordController),
-                  Divider(
+                  // Textfields(
+                  //     isPassword: true,
+                  //     //needSaffixIcon: true,
+                  //     inputTypes: TextInputType.visiblePassword,
+                  //     textControl: _passwordController),
+                  TextfieldPass(
+                    false,
+                    TextInputType.visiblePassword,
+                    _passwordController,
+                  ),
+                  const Divider(
                     color: Colors.transparent,
                     height: 10,
                   ),
-                  TextfieldHint(
+                  const TextfieldHint(
                     hint: 'Confirm Password',
                   ),
                   // Textfields(
@@ -120,7 +127,7 @@ class _SingupPageState extends State<SingupPage> {
                   //     needSaffixIcon: true,
                   //     inputTypes: TextInputType.visiblePassword,
                   //     textControl: _confirmPasswordController),
-                  Divider(
+                  const Divider(
                     color: Colors.transparent,
                     height: 10,
                   ),
@@ -128,7 +135,7 @@ class _SingupPageState extends State<SingupPage> {
               ),
             ),
             //-----------------------------------------------------------------
-            Divider(
+            const Divider(
               color: Colors.transparent,
               height: 150,
             ),
@@ -141,28 +148,7 @@ class _SingupPageState extends State<SingupPage> {
                     signUp();
                   },
                 ),
-                // OutlinedButton(
-                //   onPressed: () {
-                //     signUp();
-                //   },
-                //   style: OutlinedButton.styleFrom(
-                //     minimumSize:
-                //         Size(MediaQuery.of(context).size.width / 2.3, 55),
-                //     backgroundColor: AppColor.fillColorL,
-                //     primary: AppColor.appMainColor,
-                //     shape: RoundedRectangleBorder(
-                //         borderRadius: BorderRadius.circular(15)),
-                //     side: const BorderSide(
-                //       color: AppColor.appMainColor,
-                //       width: 2,
-                //     ),
-                //     elevation: 0,
-                //   ),
-                //   child: Text(
-                //     'Sign Up',
-                //     style: AllTextStyle.bodyTextStyle,
-                //   ),
-                // ),
+
                 //-----------------------------------------------------------------
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20),
@@ -172,7 +158,7 @@ class _SingupPageState extends State<SingupPage> {
                     roughtpage: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SinginPage(),
+                        builder: (context) => const SinginPage(),
                       ),
                     ),
                   ),

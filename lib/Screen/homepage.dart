@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:dokan/Properties/app_properties.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +14,7 @@ class Homepage extends StatelessWidget {
         leading: Builder(builder: (context) {
           return IconButton(
             onPressed: () => Scaffold.of(context).openDrawer(),
-            icon: Icon(
+            icon: const Icon(
               Icons.menu,
               color: AppColor.appMainColor,
             ),
@@ -25,14 +23,14 @@ class Homepage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.search,
               color: AppColor.appMainColor,
             ),
           ),
         ],
       ),
-      body: SafeArea(
+      body: const SafeArea(
         child: Center(
           child: Text(
             'Homepage',
@@ -44,45 +42,57 @@ class Homepage extends StatelessWidget {
         child: Drawer(
           child: ListView(
             children: [
-              DrawerHeader(
-                decoration: BoxDecoration(color: Color(0x1A519657)),
-                padding: EdgeInsets.all(10),
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: CircleAvatar(
-                        radius: 50.0,
-                        backgroundColor: Colors.transparent,
-                        backgroundImage: AssetImage('assets/profile.jpg'),
+              SizedBox(
+                height: 200,
+                child: DrawerHeader(
+                  decoration: const BoxDecoration(color: AppColor.fillColorL),
+                  padding: const EdgeInsets.all(10),
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.center + const Alignment(0, -1),
+                        child: const CircleAvatar(
+                          radius: 50.0,
+                          backgroundColor: Colors.transparent,
+                          backgroundImage: AssetImage('assets/profile.jpg'),
+                        ),
                       ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Text(
-                        'Ahnaf Sakil',
-                        style: AllTextStyle.bodyTextStyle,
+                      Align(
+                        alignment: Alignment.center + const Alignment(.3, 0),
+                        child: const Icon(
+                          Icons.verified,
+                          color: Colors.green,
+                        ),
                       ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter + Alignment(0, .2),
-                      child: Text(
-                        'ahnafsakil9@gmail.com',
-                        style: AllTextStyle.smallTextStyle,
+                      Align(
+                        alignment:
+                            Alignment.bottomCenter + const Alignment(0, -.5),
+                        child: const Text(
+                          'Ahnaf Sakil',
+                          style: AllTextStyle.bodyTextStyle,
+                        ),
                       ),
-                    ),
-                  ],
+                      Align(
+                        alignment:
+                            Alignment.bottomCenter + const Alignment(0, -.1),
+                        child: const Text(
+                          'ahnafsakil9@gmail.com',
+                          style: AllTextStyle.smallTextStyle,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               ListTile(
                 onTap: () {},
-                title: Text('Account'),
-                leading: Icon(Icons.person),
+                title: const Text('Account'),
+                leading: const Icon(Icons.person),
               ),
               ListTile(
                 onTap: () {},
-                title: Text('Settings'),
-                leading: Icon(Icons.settings),
+                title: const Text('Settings'),
+                leading: const Icon(Icons.settings),
               ),
             ],
           ),

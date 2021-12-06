@@ -1,12 +1,8 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:dokan/Auth/forgetpass.dart';
-import 'package:dokan/Auth/userform.dart';
 import 'package:dokan/Properties/app_properties.dart';
-import 'package:dokan/Properties/components.dart';
+import 'package:dokan/Properties/export.dart';
 import 'package:dokan/Screen/homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'signup.dart';
 
@@ -18,8 +14,8 @@ class SinginPage extends StatefulWidget {
 }
 
 class _SinginPageState extends State<SinginPage> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   signIn() async {
     try {
@@ -31,7 +27,8 @@ class _SinginPageState extends State<SinginPage> {
       var authCredential = userCredential.user;
       print(authCredential!.uid);
       if (authCredential.uid.isNotEmpty) {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => Homepage()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => const Homepage()));
       } else {
         Fluttertoast.showToast(msg: 'Something is Wrong');
       }
@@ -39,7 +36,7 @@ class _SinginPageState extends State<SinginPage> {
       if (e.code == 'user-not-found') {
         Fluttertoast.showToast(msg: 'No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        Fluttertoast.showToast(msg: 'Wrong password provided for that user.');
+        Fluttertoast.showToast(msg: 'Wrong password.');
       }
     }
   }
@@ -54,8 +51,8 @@ class _SinginPageState extends State<SinginPage> {
             SizedBox(
               height: 250,
               width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.all(30),
+              child: const Padding(
+                padding: EdgeInsets.all(30),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -72,27 +69,36 @@ class _SinginPageState extends State<SinginPage> {
                 // mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextfieldHint(
+                  const TextfieldHint(
                     hint: 'Email',
                   ),
+                  // Textfields(
+                  //     //isPassword: false,
+                  //      sneedSaffixIcon: false,
+                  //     inputTypes: TextInputType.emailAddress,
+                  //     textControl: _emailController),
                   Textfields(
-                      isPassword: false,
-                      needSaffixIcon: false,
-                      inputTypes: TextInputType.emailAddress,
-                      textControl: _emailController),
-                  Divider(
+                    TextInputType.emailAddress,
+                    _emailController,
+                  ),
+                  const Divider(
                     height: 10,
                     color: Colors.transparent,
                   ),
-                  TextfieldHint(
+                  const TextfieldHint(
                     hint: 'Password',
                   ),
-                  Textfields(
-                      isPassword: true,
-                      needSaffixIcon: true,
-                      inputTypes: TextInputType.visiblePassword,
-                      textControl: _passwordController),
-                  Divider(
+                  // Textfields(
+                  //     isPassword: true,
+                  //     //needSaffixIcon: true,
+                  //     inputTypes: TextInputType.visiblePassword,
+                  //     textControl: _passwordController),
+                  TextfieldPass(
+                    true,
+                    TextInputType.visiblePassword,
+                    _passwordController,
+                  ),
+                  const Divider(
                     color: Colors.transparent,
                     height: 10,
                   ),
@@ -103,14 +109,14 @@ class _SinginPageState extends State<SinginPage> {
                     roughtpage: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ForgetPassword(),
+                        builder: (context) => const ForgetPassword(),
                       ),
                     ),
                   )
                 ],
               ),
             ),
-            Divider(
+            const Divider(
               color: Colors.transparent,
               height: 300,
             ),
@@ -130,7 +136,7 @@ class _SinginPageState extends State<SinginPage> {
                     roughtpage: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SingupPage(),
+                        builder: (context) => const SingupPage(),
                       ),
                     ),
                   ),

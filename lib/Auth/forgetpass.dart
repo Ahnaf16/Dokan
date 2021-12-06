@@ -1,8 +1,5 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:dokan/Properties/app_properties.dart';
-import 'package:dokan/Properties/components.dart';
-import 'package:flutter/material.dart';
+import 'package:dokan/Properties/export.dart';
 
 class ForgetPassword extends StatefulWidget {
   const ForgetPassword({Key? key}) : super(key: key);
@@ -12,8 +9,7 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +18,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: AppColor.appMainColor,
           ),
@@ -38,8 +34,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             //color: Colors.amber,
             height: 250,
             width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: const EdgeInsets.all(30),
+            child: const Padding(
+              padding: EdgeInsets.all(30),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -56,22 +52,26 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               // mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextfieldHint(
+                const TextfieldHint(
                   hint: 'Email',
                 ),
+                // Textfields(
+                //     isPassword: false,
+                //     //needSaffixIcon: false,
+                //     inputTypes: TextInputType.emailAddress,
+                //     textControl: _passwordController),
                 Textfields(
-                    isPassword: false,
-                    needSaffixIcon: false,
-                    inputTypes: TextInputType.emailAddress,
-                    textControl: _passwordController),
-                Divider(
+                  TextInputType.emailAddress,
+                  _emailController,
+                ),
+                const Divider(
                   height: 10,
                 ),
               ],
             ),
           ),
 //-----------------------------------------------------------------
-          Divider(
+          const Divider(
             height: 150,
           ),
           PrimaryButton(
