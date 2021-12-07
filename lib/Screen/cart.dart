@@ -1,15 +1,12 @@
-import 'package:dokan/Properties/app_properties.dart';
+import 'package:dokan/export.dart';
 import 'package:flutter/material.dart';
 
-import '../export.dart';
-
-class Homepage extends StatelessWidget {
-  const Homepage({Key? key}) : super(key: key);
+class Cart extends StatelessWidget {
+  const Cart({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.appBackground,
       appBar: AppBar(
         backgroundColor: AppColor.fillColorL,
         elevation: 1,
@@ -34,12 +31,10 @@ class Homepage extends StatelessWidget {
           ),
         ],
       ),
-      body: const SafeArea(
-        child: Center(
-          child: Text(
-            'Homepage',
-            style: AllTextStyle.headerStyle,
-          ),
+      body: const Center(
+        child: Text(
+          'Cart',
+          style: AllTextStyle.headerStyle,
         ),
       ),
       drawer: const CustomDrawer(),

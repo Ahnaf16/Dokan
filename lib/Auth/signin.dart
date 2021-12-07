@@ -1,7 +1,6 @@
 import 'package:dokan/Auth/forgetpass.dart';
 import 'package:dokan/Properties/app_properties.dart';
-import 'package:dokan/Properties/export.dart';
-import 'package:dokan/Screen/homepage.dart';
+import 'package:dokan/export.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'signup.dart';
@@ -28,7 +27,7 @@ class _SinginPageState extends State<SinginPage> {
       print(authCredential!.uid);
       if (authCredential.uid.isNotEmpty) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (_) => const Homepage()));
+            context, MaterialPageRoute(builder: (_) => const Navibar()));
       } else {
         Fluttertoast.showToast(msg: 'Something is Wrong');
       }

@@ -1,5 +1,5 @@
 import 'package:dokan/Properties/app_properties.dart';
-import 'package:dokan/Properties/export.dart';
+import 'package:dokan/export.dart';
 
 class ForgetPassword extends StatefulWidget {
   const ForgetPassword({Key? key}) : super(key: key);

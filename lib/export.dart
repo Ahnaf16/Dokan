@@ -3,3 +3,8 @@ export 'package:dokan/Properties/textfields.dart';
 export 'package:dokan/Properties/texts.dart';
 export 'package:flutter/material.dart';
 export 'package:dokan/Properties/app_properties.dart';
+export 'package:dokan/Screen/cart.dart';
+export 'package:dokan/Screen/wishlist.dart';
+export 'package:dokan/Screen/homepage.dart';
+export 'package:dokan/Screen/nevigationbar.dart';
+export 'package:dokan/Properties/appdrawer.dart';

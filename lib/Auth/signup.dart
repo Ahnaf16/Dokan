@@ -4,7 +4,7 @@ import 'package:dokan/Properties/app_properties.dart';
 import 'package:dokan/Properties/texts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:dokan/Properties/export.dart';
+import 'package:dokan/export.dart';
 
 class SingupPage extends StatefulWidget {
   const SingupPage({Key? key}) : super(key: key);
