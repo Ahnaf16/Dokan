@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:dokan/export.dart';
+import '../../export.dart';
 
 class Navibar extends StatefulWidget {
   const Navibar({Key? key}) : super(key: key);
@@ -42,6 +42,7 @@ class _NavibarState extends State<Navibar> {
         showUnselectedLabels: false,
         selectedIconTheme: IconThemeData(size: 30),
         showSelectedLabels: false,
+        currentIndex: curentindex,
         items: [
           BottomNavigationBarItem(
             label: naviLebels[0],
@@ -56,7 +57,6 @@ class _NavibarState extends State<Navibar> {
             icon: naviIcons[2],
           ),
         ],
-        currentIndex: curentindex,
         onTap: (index) {
           setState(
             () {
