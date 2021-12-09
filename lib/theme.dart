@@ -18,20 +18,20 @@ class Mytheme {
     ),
   );
 
-  static final dark = ThemeData(
-    scaffoldBackgroundColor: AppColor.appBackgroundDark,
-    colorScheme: const ColorScheme.dark(
-      secondary: AppColor.appMainColorDark,
-    ),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        backgroundColor: AppColor.fillColorD,
-        primary: AppColor.appMainColorDark,
-        side: const BorderSide(
-          color: AppColor.appMainColorDark,
-          width: 2,
-        ),
-      ),
-    ),
-  );
+  // static final dark = ThemeData(
+  //   scaffoldBackgroundColor: AppColor.appBackgroundDark,
+  //   colorScheme: const ColorScheme.dark(
+  //     secondary: AppColor.appMainColorDark,
+  //   ),
+  //   outlinedButtonTheme: OutlinedButtonThemeData(
+  //     style: OutlinedButton.styleFrom(
+  //       backgroundColor: AppColor.fillColorD,
+  //       primary: AppColor.appMainColorDark,
+  //       side: const BorderSide(
+  //         color: AppColor.appMainColorDark,
+  //         width: 2,
+  //       ),
+  //     ),
+  //   ),
+  // );
 }

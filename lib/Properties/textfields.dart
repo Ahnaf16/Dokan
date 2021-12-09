@@ -81,7 +81,7 @@ class _TextfieldPassState extends State<TextfieldPass> {
               });
             },
             child: Icon(
-              isPassword ? Icons.visibility : Icons.visibility_off,
+              isPassword ? Icons.visibility_off : Icons.visibility,
               color: AppColor.appMainColor,
             ),
           ),

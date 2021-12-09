@@ -38,6 +38,9 @@ dependencies:
   firebase_auth: ^3.2.0
   cloud_firestore: ^3.1.0
   fluttertoast: ^8.0.8
+  carousel_pro_nullsafety: ^1.0.2
+
+ 
 
 
 dev_dependencies:
