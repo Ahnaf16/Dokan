@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 import '../../export.dart';
 
@@ -10,7 +11,7 @@ class Navibar extends StatefulWidget {
 }
 
 class _NavibarState extends State<Navibar> {
-  var curentindex = 0;
+  var _curentindex = 0;
 
   final neviPages = [
     Homepage(),
@@ -18,52 +19,49 @@ class _NavibarState extends State<Navibar> {
     Cart(),
   ];
 
-  List<Widget> naviIcons = [
-    Icon(Icons.home),
-    Icon(Icons.favorite),
-    Icon(Icons.shopping_cart),
-  ];
-  List<String> naviLebels = [
-    'Home',
-    'Wishlist',
-    'Cart',
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: neviPages[curentindex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: AppColor.fillColorL,
-        elevation: 1,
-        selectedItemColor: AppColor.appMainColor,
-        unselectedItemColor: Color(0xFF4E4E4E),
-        selectedFontSize: 15,
-        showUnselectedLabels: false,
-        selectedIconTheme: IconThemeData(size: 30),
-        showSelectedLabels: false,
-        currentIndex: curentindex,
-        items: [
-          BottomNavigationBarItem(
-            label: naviLebels[0],
-            icon: naviIcons[0],
-          ),
-          BottomNavigationBarItem(
-            label: naviLebels[1],
-            icon: naviIcons[1],
-          ),
-          BottomNavigationBarItem(
-            label: naviLebels[2],
-            icon: naviIcons[2],
-          ),
-        ],
-        onTap: (index) {
+      body: neviPages[_curentindex],
+      bottomNavigationBar: GNav(
+        gap: 15,
+        rippleColor: AppColor.fillColorL,
+        curve: Curves.easeInQuad,
+        duration: Duration(milliseconds: 400),
+        color: Colors.black54,
+        activeColor: AppColor.appMainColor,
+        tabBackgroundColor: AppColor.appSecColor,
+        padding: EdgeInsets.symmetric(
+          horizontal: 30,
+          vertical: 10,
+        ),
+        tabMargin: EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 10,
+        ),
+        backgroundColor: AppColor.appBackground,
+        selectedIndex: _curentindex,
+        onTabChange: (index) {
           setState(
             () {
-              curentindex = index;
+              _curentindex = index;
             },
           );
         },
+        tabs: [
+          GButton(
+            icon: Icons.home,
+            text: 'Home',
+          ),
+          GButton(
+            icon: Icons.favorite,
+            text: 'Wishlist',
+          ),
+          GButton(
+            icon: Icons.shopping_cart,
+            text: 'Cart',
+          ),
+        ],
       ),
     );
   }
