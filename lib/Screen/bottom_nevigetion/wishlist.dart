@@ -33,7 +33,7 @@ class Wishlist extends StatelessWidget {
       body: const Center(
         child: Text(
           'Wishlist',
-          style: AllTextStyle.headerStyle,
+          style: AppTextStyle.headerStyle,
         ),
       ),
       drawer: const CustomDrawer(),

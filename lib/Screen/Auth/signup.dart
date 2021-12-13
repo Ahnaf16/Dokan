@@ -1,5 +1,5 @@
-import 'package:dokan/Auth/signin.dart';
-import 'package:dokan/Auth/userform.dart';
+import 'package:dokan/Screen/Auth/signin.dart';
+import 'package:dokan/Screen/Auth/userform.dart';
 import 'package:dokan/Properties/app_properties.dart';
 import 'package:dokan/Properties/texts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -62,7 +62,7 @@ class _SingupPageState extends State<SingupPage> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Sign Up',
-                    style: AllTextStyle.headerStyle,
+                    style: AppTextStyle.headerStyle,
                   ),
                 ),
               ),

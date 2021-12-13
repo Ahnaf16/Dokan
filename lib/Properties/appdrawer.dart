@@ -38,7 +38,7 @@ class CustomDrawer extends StatelessWidget {
                           Alignment.bottomCenter + const Alignment(0, -.5),
                       child: const Text(
                         'Ahnaf Sakil',
-                        style: AllTextStyle.bodyTextStyle,
+                        style: AppTextStyle.bodyTextStyle,
                       ),
                     ),
                     Align(
@@ -46,7 +46,7 @@ class CustomDrawer extends StatelessWidget {
                           Alignment.bottomCenter + const Alignment(0, -.1),
                       child: const Text(
                         'ahnafsakil9@gmail.com',
-                        style: AllTextStyle.smallTextStyle,
+                        style: AppTextStyle.smallTextStyle,
                       ),
                     ),
                   ],

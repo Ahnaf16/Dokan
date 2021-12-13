@@ -1,4 +1,4 @@
-import 'package:dokan/Auth/forgetpass.dart';
+import 'package:dokan/Screen/Auth/forgetpass.dart';
 import 'package:dokan/Properties/app_properties.dart';
 import 'package:dokan/export.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -56,7 +56,7 @@ class _SinginPageState extends State<SinginPage> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Sign In',
-                    style: AllTextStyle.headerStyle,
+                    style: AppTextStyle.headerStyle,
                   ),
                 ),
               ),

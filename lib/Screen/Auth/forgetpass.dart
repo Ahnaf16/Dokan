@@ -40,7 +40,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Restore Password',
-                  style: AllTextStyle.headerStyle,
+                  style: AppTextStyle.headerStyle,
                 ),
               ),
             ),

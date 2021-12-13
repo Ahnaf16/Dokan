@@ -15,7 +15,7 @@ class TextfieldHint extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Text(
         hint,
-        style: AllTextStyle.smallTextStyle,
+        style: AppTextStyle.smallTextStyle,
       ),
     );
   }

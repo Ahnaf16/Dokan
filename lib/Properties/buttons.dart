@@ -28,7 +28,7 @@ class PrimaryButton extends StatelessWidget {
       ),
       child: Text(
         buttonText,
-        style: AllTextStyle.bodyTextStyle,
+        style: AppTextStyle.bodyTextStyle,
       ),
     );
   }

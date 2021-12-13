@@ -18,9 +18,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'E-Commerce App',
-      // themeMode: ThemeMode.system,
-      // darkTheme: Mytheme.dark,
-      // theme: Mytheme.light,
       home: SplashScreen(),
     );
   }

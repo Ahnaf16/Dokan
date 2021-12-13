@@ -34,7 +34,7 @@ class Cart extends StatelessWidget {
       body: const Center(
         child: Text(
           'Cart',
-          style: AllTextStyle.headerStyle,
+          style: AppTextStyle.headerStyle,
         ),
       ),
       drawer: const CustomDrawer(),
