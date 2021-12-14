@@ -5,38 +5,14 @@ class Wishlist extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColor.fillColorL,
-        elevation: 1,
-        leading: Builder(
-          builder: (context) {
-            return IconButton(
-              onPressed: () => Scaffold.of(context).openDrawer(),
-              icon: const Icon(
-                Icons.menu,
-                color: AppColor.appMainColor,
-              ),
-            );
-          },
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.search,
-              color: AppColor.appMainColor,
-            ),
-          ),
-        ],
-      ),
-      body: const Center(
+    return const Scaffold(
+      backgroundColor: AppColor.appBackground,
+      body: Center(
         child: Text(
           'Wishlist',
           style: AppTextStyle.headerStyle,
         ),
       ),
-      drawer: const CustomDrawer(),
     );
   }
 }

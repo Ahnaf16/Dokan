@@ -1,5 +1,10 @@
-import 'package:dokan/Properties/app_properties.dart';
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:async';
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../export.dart';
 
 class Homepage extends StatefulWidget {
@@ -10,149 +15,97 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  TextEditingController searchbarControl = TextEditingController();
-  int _toggle = 0;
+  final imgs = [
+    'assets/banar2.jpeg',
+    'assets/banar3.jpeg',
+    'assets/banar4.jpeg',
+    'assets/banar5.jpeg',
+    'assets/banar6.jpeg',
+  ];
+  int activeIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.appBackground,
-      appBar: AppBar(
-        backgroundColor: AppColor.appBackground,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        flexibleSpace: Container(
-          color: Colors.transparent,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Builder(
-                  builder: (context) {
-                    return IconButton(
-                      onPressed: () => Scaffold.of(context).openDrawer(),
-                      icon: const Icon(
-                        Icons.menu,
-                        color: AppColor.appMainColor,
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Align(
-                alignment: (_toggle == 0)
-                    ? Alignment.bottomCenter
-                    : Alignment.bottomCenter + const Alignment(0, -.4),
-                child: AnimatedDefaultTextStyle(
-                  child: const Text('Dokan'),
-                  style: TextStyle(
-                      fontSize: (_toggle == 0) ? 30 : 20,
-                      color: AppColor.appMainColor),
-                  duration: const Duration(milliseconds: 200),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: searchBar(),
-              ),
-            ],
-          ),
-        ),
-      ),
       body: SafeArea(
-        child: Container(
-          color: Colors.transparent,
-        ),
-      ),
-      drawer: const CustomDrawer(),
-    );
-  }
-
-  //---------------------------searchbar--------------------------------------
-
-  Widget searchBar() {
-    return Stack(
-      children: [
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 400),
-          height: 47,
-          width: (_toggle == 0) ? 45 : 380,
-          curve: Curves.easeOut,
-        ),
-        AnimatedPositioned(
-          duration: const Duration(milliseconds: 0),
-          child: AnimatedOpacity(
-            opacity: (_toggle == 1) ? 1 : 0,
-            duration: const Duration(milliseconds: 400),
-            curve: (_toggle == 1) ? Curves.elasticIn : Curves.easeOutQuart,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              width: (_toggle == 0) ? 45 : 380,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                child: TextField(
-                  controller: searchbarControl,
-                  style: const TextStyle(
-                    fontSize: 22,
-                  ),
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 10,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                        color: AppColor.appMainColor,
-                        width: 1,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 20,
+              ),
+              child: Material(
+                elevation: 15,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 10,
+                      ),
+                      child: CarouselSlider.builder(
+                        itemCount: imgs.length,
+                        options: CarouselOptions(
+                          height: 200,
+                          autoPlay: true,
+                          enlargeCenterPage: true,
+                          viewportFraction: .7,
+                          onPageChanged: (index, reason) =>
+                              setState(() => activeIndex = index),
+                        ),
+                        itemBuilder: (context, index, realIndex) {
+                          final showImg = imgs[index];
+                          return buildImg(showImg, index);
+                        },
                       ),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                        color: AppColor.appMainColor,
-                        width: 1,
-                      ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: buildicator(),
                     ),
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(
-                          () {
-                            searchbarControl.clear();
-                          },
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.close,
-                        color: AppColor.appMainColor,
-                      ),
-                    ),
-                  ),
+                  ],
                 ),
               ),
             ),
-          ),
+          ],
         ),
-        AnimatedPositioned(
-          child: IconButton(
-            onPressed: () {
-              setState(
-                () {
-                  if (_toggle == 0) {
-                    _toggle = 1;
-                  } else {
-                    _toggle = 0;
-                    searchbarControl.clear();
-                  }
-                },
-              );
-            },
-            icon: Icon((_toggle == 0) ? Icons.search : Icons.arrow_back_ios),
-          ),
-          duration: const Duration(milliseconds: 350),
-        )
-      ],
+      ),
     );
   }
+
+  Widget buildImg(String showImg, int index) => Container(
+        decoration: BoxDecoration(
+          color: AppColor.appSecColor,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            color: AppColor.appMainColor,
+            width: 2,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 5,
+            vertical: 5,
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset(
+              showImg,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      );
+
+  Widget buildicator() => AnimatedSmoothIndicator(
+        activeIndex: activeIndex,
+        count: imgs.length,
+        effect: SwapEffect(
+          activeDotColor: AppColor.appMainColor,
+          dotColor: AppColor.appSecColor,
+          dotHeight: 10,
+          dotWidth: 10,
+        ),
+      );
 }
