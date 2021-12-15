@@ -8,7 +8,7 @@ class AppColor {
   static const Color fillColorL = Colors.white;
 }
 
-//----------------------------------------------------------------
+//----------------------textStyle------------------------------------------
 
 class AppTextStyle {
   static const TextStyle headerStyle = TextStyle(
@@ -18,12 +18,27 @@ class AppTextStyle {
   );
 
   static const TextStyle bodyTextStyle = TextStyle(
-    color: AppColor.textColorL,
+    color: AppColor.appMainColor,
     fontSize: 22,
   );
 
   static const TextStyle smallTextStyle = TextStyle(
-    color: AppColor.textColorL,
+    color: AppColor.appMainColor,
     fontSize: 18,
   );
 }
+
+//----------------------------buttonStyle-------------------------------------
+
+ButtonStyle buttonStyle = OutlinedButton.styleFrom(
+  minimumSize: const Size(200, 55),
+  backgroundColor: AppColor.fillColorL,
+  primary: AppColor.appMainColor,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(15),
+  ),
+  side: const BorderSide(
+    color: AppColor.appMainColor,
+    width: 2,
+  ),
+);

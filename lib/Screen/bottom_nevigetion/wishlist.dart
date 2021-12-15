@@ -1,4 +1,4 @@
-import 'package:dokan/export.dart';
+import 'package:dokan/Properties/export.dart';
 
 class Wishlist extends StatelessWidget {
   const Wishlist({Key? key}) : super(key: key);

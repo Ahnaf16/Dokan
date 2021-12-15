@@ -1,5 +1,5 @@
 import 'package:dokan/Properties/app_properties.dart';
-import 'package:dokan/export.dart';
+import 'package:dokan/Properties/export.dart';
 
 class ForgetPassword extends StatefulWidget {
   const ForgetPassword({Key? key}) : super(key: key);
@@ -76,7 +76,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
           ),
           PrimaryButton(
             buttonText: 'Restore password',
-            gotoPage: () => Navigator.pop(context),
+            //gotoPage: () => Navigator.pop(context),
           )
         ],
       ),

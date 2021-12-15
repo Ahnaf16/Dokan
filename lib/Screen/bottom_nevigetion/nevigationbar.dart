@@ -1,8 +1,13 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import '../../export.dart';
+import '../../Properties/export.dart';
 
 class Navibar extends StatefulWidget {
-  const Navibar({Key? key}) : super(key: key);
+  final Function(User?) onClick;
+
+  Navibar({required this.onClick});
 
   @override
   State<Navibar> createState() => _NavibarState();
@@ -21,11 +26,20 @@ class _NavibarState extends State<Navibar> {
 
   TextEditingController searchbarControl = TextEditingController();
 
+  onClicked(userCred) {
+    user = userCred;
+    widget.onClick(user);
+  }
+
+  User? user;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(
+        onlogout: (userCred) => onClicked(userCred),
+      ),
       body: neviPages[_curentindex],
       bottomNavigationBar: GNav(
         gap: 15,

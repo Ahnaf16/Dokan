@@ -1,10 +1,16 @@
-import 'package:dokan/export.dart';
+import 'package:dokan/Properties/export.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:line_icons/line_icons.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({
-    Key? key,
-  }) : super(key: key);
+  final Function(User?) onlogout;
+
+  CustomDrawer({required this.onlogout});
+
+  Future<void> logOut() async {
+    await FirebaseAuth.instance.signOut();
+    onlogout(null);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +106,9 @@ class CustomDrawer extends StatelessWidget {
                 height: 470,
               ),
               ListTile(
-                onTap: () {},
+                onTap: () {
+                  logOut();
+                },
                 title: Text(
                   'Log out',
                   style: AppTextStyle.smallTextStyle.copyWith(

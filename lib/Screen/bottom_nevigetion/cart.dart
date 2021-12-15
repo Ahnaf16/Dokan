@@ -1,4 +1,4 @@
-import 'package:dokan/export.dart';
+import 'package:dokan/Properties/export.dart';
 import 'package:flutter/material.dart';
 
 class Cart extends StatelessWidget {
