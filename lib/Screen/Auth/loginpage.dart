@@ -6,8 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  final Function(User?) onGuestLogIn;
-  LoginPage({required this.onGuestLogIn});
+  final Function(User?) onLogIn;
+  LoginPage({required this.onLogIn});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -16,13 +16,21 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   //----------------------------guest Login-------------------------------------
 
-  guestLogIn() async {
+  Future guestLogIn() async {
     UserCredential userCredential =
         await FirebaseAuth.instance.signInAnonymously();
-    widget.onGuestLogIn(userCredential.user);
+    widget.onLogIn(userCredential.user);
   }
-//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
+  onSignUp(userCred) {
+    setState(() {
+      user = userCred;
+      widget.onLogIn(user);
+    });
+  }
+
+  User? user;
   bool isloading = false;
   bool loginLoading = false;
   bool isPassword = true;
@@ -137,7 +145,9 @@ class _LoginPageState extends State<LoginPage> {
               roughtpage: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SignUpPage(),
+                  builder: (context) => SignUpPage(
+                    onLogIn: (userCred) => onSignUp(userCred),
+                  ),
                 ),
               ),
             ),

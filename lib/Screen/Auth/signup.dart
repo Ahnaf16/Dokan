@@ -1,14 +1,47 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, prefer_const_constructors_in_immutables
 
 import 'package:dokan/Properties/export.dart';
+import 'package:dokan/Screen/Auth/loginpage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
+  final Function(User?) onLogIn;
+  SignUpPage({required this.onLogIn});
+
   @override
   State<SignUpPage> createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+//
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future signUp() async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      var authCredential = userCredential.user;
+
+      if (authCredential!.uid.isNotEmpty) {
+        Navigator.pop(context);
+      } else {
+        error = 'Something is Wrong';
+      }
+      widget.onLogIn(userCredential.user);
+    } on FirebaseException catch (e) {
+      setState(() {
+        error = e.message!;
+      });
+    }
+  }
+
+  String error = '';
   bool isloading = false;
   bool isPassword = true;
 
@@ -33,7 +66,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 vertical: 10,
               ),
               child: TextField(
-                //controller: ,
+                controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 style: AppTextStyle.bodyTextStyle,
                 decoration: textfilesStyle('Email'),
@@ -46,7 +79,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 vertical: 10,
               ),
               child: TextField(
-                //controller: ,
+                controller: _passwordController,
                 obscureText: isPassword,
                 style: AppTextStyle.bodyTextStyle,
                 decoration: textfilesStyle('Password').copyWith(
@@ -67,6 +100,13 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
 
+            cDivider(5),
+
+            Text(
+              error,
+              style: AppTextStyle.errorText,
+            ),
+
             cDivider(50),
 
 //----------------------------button-------------------------------------
@@ -77,6 +117,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 setState(() {
                   isloading = true;
                 });
+                signUp();
               },
               style: buttonStyle,
               child: isloading
