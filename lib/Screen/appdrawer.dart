@@ -12,6 +12,8 @@ class CustomDrawer extends StatelessWidget {
     onlogout(null);
   }
 
+  final User? _currentUser = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -53,8 +55,8 @@ class CustomDrawer extends StatelessWidget {
                       Align(
                         alignment:
                             Alignment.bottomCenter + const Alignment(0, -.1),
-                        child: const Text(
-                          'ahnafsakil9@gmail.com',
+                        child: Text(
+                          _currentUser!.email.toString(),
                           style: AppTextStyle.smallTextStyle,
                         ),
                       ),

@@ -2,9 +2,7 @@
 
 import 'package:dokan/Properties/app_properties.dart';
 import 'package:flutter/material.dart';
-
 import '../tree.dart';
-import 'Auth/signinold.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

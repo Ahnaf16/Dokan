@@ -16,9 +16,6 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
 //
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
   Future signUp() async {
     try {
       UserCredential userCredential =
@@ -26,10 +23,21 @@ class _SignUpPageState extends State<SignUpPage> {
         email: _emailController.text,
         password: _passwordController.text,
       );
+      //widget.onLogIn(null);
       var authCredential = userCredential.user;
 
+      if (_passwordController.text != _confirmPassController.text) {
+        error = 'Passwod did\'t match';
+      }
+
       if (authCredential!.uid.isNotEmpty) {
-        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                LoginPage(onLogIn: (userCred) => test(userCred)),
+          ),
+        );
       } else {
         error = 'Something is Wrong';
       }
@@ -37,13 +45,33 @@ class _SignUpPageState extends State<SignUpPage> {
     } on FirebaseException catch (e) {
       setState(() {
         error = e.message!;
+        if (e.message == 'Given String is empty or null') {
+          error = 'Please enter a email';
+        }
+        if (e.code == 'weak-password') {
+          error = 'The password is too weak.';
+        } else if (e.code == 'email-already-in-use') {
+          error = 'The account already exists for that email.';
+        }
       });
     }
   }
 
+  test(userCred) {
+    setState(() {
+      user = userCred;
+      widget.onLogIn(user);
+    });
+  }
+
+  User? user;
   String error = '';
   bool isloading = false;
   bool isPassword = true;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPassController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +87,19 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
 
             cDivider(100),
+            //----------------------------textfields-------------------------------------
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 40,
+                vertical: 10,
+              ),
+              child: TextField(
+                controller: _nameController,
+                keyboardType: TextInputType.emailAddress,
+                style: AppTextStyle.bodyTextStyle,
+                decoration: textfilesStyle('Name'),
+              ),
+            ),
 
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -99,6 +140,32 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 40,
+                vertical: 10,
+              ),
+              child: TextField(
+                controller: _confirmPassController,
+                obscureText: isPassword,
+                style: AppTextStyle.bodyTextStyle,
+                decoration: textfilesStyle('Confirm Password').copyWith(
+                  suffixIcon: InkWell(
+                    onTap: () {
+                      setState(
+                        () {
+                          isPassword = !isPassword;
+                        },
+                      );
+                    },
+                    child: Icon(
+                      isPassword ? Icons.visibility_off : Icons.visibility,
+                      color: AppColor.appMainColor,
+                    ),
+                  ),
+                ),
+              ),
+            ),
 
             cDivider(5),
 
@@ -112,12 +179,14 @@ class _SignUpPageState extends State<SignUpPage> {
 //----------------------------button-------------------------------------
 
             OutlinedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (isloading) return;
                 setState(() {
                   isloading = true;
                 });
-                signUp();
+
+                await signUp();
+                isloading = false;
               },
               style: buttonStyle,
               child: isloading

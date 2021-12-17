@@ -23,6 +23,38 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 //------------------------------------------------------------------------------
+
+  Future logIn() async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      var authCredential = userCredential.user;
+
+      if (authCredential!.uid.isNotEmpty) {
+        error = 'Login success';
+      } else {
+        error = 'Something is Wrong';
+      }
+      widget.onLogIn(userCredential.user);
+    } on FirebaseException catch (e) {
+      setState(() {
+        error = e.message!;
+        if (e.code == 'user-not-found') {
+          error = 'No user found for that email.';
+        } else if (e.code == 'wrong-password') {
+          error = 'Wrong password provided for that user.';
+
+          if (e.message == 'Given String is empty or null') {
+            error = 'Please enter a email';
+          }
+        }
+      });
+    }
+  }
+
   onSignUp(userCred) {
     setState(() {
       user = userCred;
@@ -30,10 +62,13 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  String error = '';
   User? user;
   bool isloading = false;
   bool loginLoading = false;
   bool isPassword = true;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                 vertical: 10,
               ),
               child: TextField(
-                //controller: ,
+                controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 style: AppTextStyle.bodyTextStyle,
                 decoration: textfilesStyle('Email'),
@@ -69,9 +104,8 @@ class _LoginPageState extends State<LoginPage> {
                 vertical: 10,
               ),
               child: TextField(
-                //controller: ,
+                controller: _passwordController,
                 obscureText: isPassword,
-
                 style: AppTextStyle.bodyTextStyle,
                 decoration: textfilesStyle('Password').copyWith(
                   suffixIcon: IconButton(
@@ -89,6 +123,13 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
 
+            cDivider(5),
+
+            Text(
+              error,
+              style: AppTextStyle.errorText,
+            ),
+
             cDivider(50),
 
 //----------------------------button-------------------------------------
@@ -96,14 +137,16 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   OutlinedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (loginLoading) return;
                       setState(() {
                         loginLoading = true;
                       });
+                      await logIn();
+                      loginLoading = false;
                     },
                     style: buttonStyle,
                     child: loginLoading
@@ -115,24 +158,24 @@ class _LoginPageState extends State<LoginPage> {
                             style: AppTextStyle.bodyTextStyle,
                           ),
                   ),
-                  OutlinedButton(
-                    onPressed: () async {
-                      if (isloading) return;
-                      setState(() {
-                        isloading = true;
-                      });
-                      await guestLogIn();
-                    },
-                    style: buttonStyle,
-                    child: isloading
-                        ? CircularProgressIndicator(
-                            color: AppColor.appMainColor,
-                          )
-                        : Text(
-                            'Guest LogIn',
-                            style: AppTextStyle.bodyTextStyle,
-                          ),
-                  ),
+                  // OutlinedButton(
+                  //   onPressed: () async {
+                  //     if (isloading) return;
+                  //     setState(() {
+                  //       isloading = true;
+                  //     });
+                  //     await guestLogIn();
+                  //   },
+                  //   style: buttonStyle,
+                  //   child: isloading
+                  //       ? CircularProgressIndicator(
+                  //           color: AppColor.appMainColor,
+                  //         )
+                  //       : Text(
+                  //           'Guest LogIn',
+                  //           style: AppTextStyle.bodyTextStyle,
+                  //         ),
+                  // ),
                 ],
               ),
             ),
