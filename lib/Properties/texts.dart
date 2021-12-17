@@ -21,11 +21,11 @@ class Richtexts extends StatelessWidget {
         children: [
           TextSpan(
             text: firstText,
-            style: AllTextStyle.smallTextStyle.copyWith(fontSize: 16),
+            style: AppTextStyle.smallTextStyle.copyWith(fontSize: 16),
           ),
           TextSpan(
               text: secText,
-              style: AllTextStyle.smallTextStyle
+              style: AppTextStyle.smallTextStyle
                   .copyWith(fontWeight: FontWeight.w600, fontSize: 16),
               recognizer: TapGestureRecognizer()..onTap = roughtpage),
         ],

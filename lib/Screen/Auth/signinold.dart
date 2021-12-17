@@ -1,9 +1,8 @@
-import 'package:dokan/Auth/forgetpass.dart';
 import 'package:dokan/Properties/app_properties.dart';
-import 'package:dokan/export.dart';
+import 'package:dokan/Properties/export.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'signup.dart';
+import 'signupold.dart';
 
 class SinginPage extends StatefulWidget {
   const SinginPage({Key? key}) : super(key: key);
@@ -16,29 +15,29 @@ class _SinginPageState extends State<SinginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  signIn() async {
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-      var authCredential = userCredential.user;
-      print(authCredential!.uid);
-      if (authCredential.uid.isNotEmpty) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => const Navibar()));
-      } else {
-        Fluttertoast.showToast(msg: 'Something is Wrong');
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        Fluttertoast.showToast(msg: 'No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        Fluttertoast.showToast(msg: 'Wrong password.');
-      }
-    }
-  }
+  // signIn() async {
+  //   try {
+  //     UserCredential userCredential =
+  //         await FirebaseAuth.instance.signInWithEmailAndPassword(
+  //       email: _emailController.text,
+  //       password: _passwordController.text,
+  //     );
+  //     var authCredential = userCredential.user;
+  //     print(authCredential!.uid);
+  //     if (authCredential.uid.isNotEmpty) {
+  //       Navigator.push(
+  //           context, MaterialPageRoute(builder: (_) => const Navibar()));
+  //     } else {
+  //       Fluttertoast.showToast(msg: 'Something is Wrong');
+  //     }
+  //   } on FirebaseAuthException catch (e) {
+  //     if (e.code == 'user-not-found') {
+  //       Fluttertoast.showToast(msg: 'No user found for that email.');
+  //     } else if (e.code == 'wrong-password') {
+  //       Fluttertoast.showToast(msg: 'Wrong password.');
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +55,7 @@ class _SinginPageState extends State<SinginPage> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Sign In',
-                    style: AllTextStyle.headerStyle,
+                    style: AppTextStyle.headerStyle,
                   ),
                 ),
               ),
@@ -92,26 +91,26 @@ class _SinginPageState extends State<SinginPage> {
                   //     //needSaffixIcon: true,
                   //     inputTypes: TextInputType.visiblePassword,
                   //     textControl: _passwordController),
-                  TextfieldPass(
-                    true,
-                    TextInputType.visiblePassword,
-                    _passwordController,
-                  ),
+                  // TextfieldPass(
+                  //   true,
+                  //   TextInputType.visiblePassword,
+                  //   _passwordController,
+                  // ),
                   const Divider(
                     color: Colors.transparent,
                     height: 10,
                   ),
                   //-----------------------------------------------------------------
-                  Richtexts(
-                    firstText: '',
-                    secText: 'Forget Password?',
-                    roughtpage: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ForgetPassword(),
-                      ),
-                    ),
-                  )
+                  // Richtexts(
+                  //   firstText: '',
+                  //   secText: 'Forget Password?',
+                  //   roughtpage: () => Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => const ForgetPassword(),
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -123,7 +122,7 @@ class _SinginPageState extends State<SinginPage> {
               children: [
                 PrimaryButton(
                   buttonText: 'Sign In',
-                  gotoPage: () => signIn(),
+                  // gotoPage: () => signIn(),
                 ),
                 //-----------------------------------------------------------------
 

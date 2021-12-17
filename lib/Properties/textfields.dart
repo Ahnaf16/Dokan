@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 import 'app_properties.dart';
 
@@ -15,7 +17,7 @@ class TextfieldHint extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Text(
         hint,
-        style: AllTextStyle.smallTextStyle,
+        style: AppTextStyle.smallTextStyle,
       ),
     );
   }
@@ -23,81 +25,12 @@ class TextfieldHint extends StatelessWidget {
 
 //-------------------------------------------------------------
 
-class TextfieldPass extends StatefulWidget {
-  TextfieldPass(
-    //this.isPassword,
-    this.needSaffixIcon,
-    this.inputTypes,
-    this.textControl,
-  );
-
-  final bool needSaffixIcon;
-  final TextInputType inputTypes;
-  final TextEditingController textControl;
-
-  @override
-  State<TextfieldPass> createState() => _TextfieldPassState();
-}
-
-class _TextfieldPassState extends State<TextfieldPass> {
-  bool isPassword = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: widget.textControl,
-      style: const TextStyle(
-        fontSize: 22,
-      ),
-      obscureText: isPassword,
-      keyboardType: widget.inputTypes,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 15,
-        ),
-        filled: true,
-        fillColor: AppColor.fillColorL,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: const BorderSide(
-            color: AppColor.appMainColor,
-            width: 2,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: const BorderSide(
-            color: AppColor.appMainColor,
-            width: 2,
-          ),
-        ),
-        suffixIcon: Visibility(
-          visible: widget.needSaffixIcon,
-          child: InkWell(
-            onTap: () {
-              setState(() {
-                isPassword = !isPassword;
-              });
-            },
-            child: Icon(
-              isPassword ? Icons.visibility_off : Icons.visibility,
-              color: AppColor.appMainColor,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-//------------------------------------------
-
 class Textfields extends StatelessWidget {
-  Textfields(
+  const Textfields(
     this.inputTypes,
     this.textControl,
   );
+
   final TextInputType inputTypes;
   final TextEditingController textControl;
 
@@ -109,28 +42,6 @@ class Textfields extends StatelessWidget {
         fontSize: 22,
       ),
       keyboardType: inputTypes,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 15,
-        ),
-        filled: true,
-        fillColor: AppColor.fillColorL,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: const BorderSide(
-            color: AppColor.appMainColor,
-            width: 2,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: const BorderSide(
-            color: AppColor.appMainColor,
-            width: 2,
-          ),
-        ),
-      ),
     );
   }
 }

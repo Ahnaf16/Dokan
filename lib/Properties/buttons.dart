@@ -5,16 +5,16 @@ class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
     Key? key,
     required this.buttonText,
-    required this.gotoPage,
+    //required this.gotoPage,
   }) : super(key: key);
 
   final String buttonText;
-  final VoidCallback gotoPage;
+  // final VoidCallback gotoPage;
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      onPressed: gotoPage,
+      onPressed: () {}, //gotoPage,
       style: OutlinedButton.styleFrom(
         minimumSize: Size(MediaQuery.of(context).size.width / 2.3, 55),
         backgroundColor: AppColor.fillColorL,
@@ -28,7 +28,7 @@ class PrimaryButton extends StatelessWidget {
       ),
       child: Text(
         buttonText,
-        style: AllTextStyle.bodyTextStyle,
+        style: AppTextStyle.bodyTextStyle,
       ),
     );
   }

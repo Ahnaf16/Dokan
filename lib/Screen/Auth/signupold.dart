@@ -1,10 +1,10 @@
-import 'package:dokan/Auth/signin.dart';
-import 'package:dokan/Auth/userform.dart';
+import 'package:dokan/Screen/Auth/signinold.dart';
+import 'package:dokan/Screen/Auth/userform.dart';
 import 'package:dokan/Properties/app_properties.dart';
 import 'package:dokan/Properties/texts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:dokan/export.dart';
+import 'package:dokan/Properties/export.dart';
 
 class SingupPage extends StatefulWidget {
   const SingupPage({Key? key}) : super(key: key);
@@ -19,32 +19,32 @@ class _SingupPageState extends State<SingupPage> {
   final TextEditingController _passwordController = TextEditingController();
   //TextEditingController _confirmPasswordController = TextEditingController();
 
-  signUp() async {
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-      var authCredential = userCredential.user;
-      print(authCredential!.uid);
-      if (authCredential.uid.isNotEmpty) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => const UserForm()));
-      } else {
-        Fluttertoast.showToast(msg: 'Something is Wrong');
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        Fluttertoast.showToast(msg: 'The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        Fluttertoast.showToast(
-            msg: 'The account already exists for that email.');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  // signUp() async {
+  //   try {
+  //     UserCredential userCredential =
+  //         await FirebaseAuth.instance.createUserWithEmailAndPassword(
+  //       email: _emailController.text,
+  //       password: _passwordController.text,
+  //     );
+  //     var authCredential = userCredential.user;
+  //     print(authCredential!.uid);
+  //     if (authCredential.uid.isNotEmpty) {
+  //       Navigator.push(
+  //           context, MaterialPageRoute(builder: (_) => const UserForm()));
+  //     } else {
+  //       Fluttertoast.showToast(msg: 'Something is Wrong');
+  //     }
+  //   } on FirebaseAuthException catch (e) {
+  //     if (e.code == 'weak-password') {
+  //       Fluttertoast.showToast(msg: 'The password provided is too weak.');
+  //     } else if (e.code == 'email-already-in-use') {
+  //       Fluttertoast.showToast(
+  //           msg: 'The account already exists for that email.');
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class _SingupPageState extends State<SingupPage> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Sign Up',
-                    style: AllTextStyle.headerStyle,
+                    style: AppTextStyle.headerStyle,
                   ),
                 ),
               ),
@@ -110,11 +110,11 @@ class _SingupPageState extends State<SingupPage> {
                   //     //needSaffixIcon: true,
                   //     inputTypes: TextInputType.visiblePassword,
                   //     textControl: _passwordController),
-                  TextfieldPass(
-                    false,
-                    TextInputType.visiblePassword,
-                    _passwordController,
-                  ),
+                  // TextfieldPass(
+                  //   false,
+                  //   TextInputType.visiblePassword,
+                  //   _passwordController,
+                  // ),
                   const Divider(
                     color: Colors.transparent,
                     height: 10,
@@ -144,9 +144,9 @@ class _SingupPageState extends State<SingupPage> {
               children: [
                 PrimaryButton(
                   buttonText: 'Sign Up',
-                  gotoPage: () {
-                    signUp();
-                  },
+                  // gotoPage: () {
+                  //   signUp();
+                  // },
                 ),
 
                 //-----------------------------------------------------------------

@@ -12,7 +12,7 @@ class UserForm extends StatelessWidget {
           color: AppColor.appBackground,
           child: const Text(
             'User Form',
-            style: AllTextStyle.headerStyle,
+            style: AppTextStyle.headerStyle,
           ),
         ),
       ),

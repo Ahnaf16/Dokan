@@ -3,7 +3,8 @@
 import 'package:dokan/Properties/app_properties.dart';
 import 'package:flutter/material.dart';
 
-import '../Auth/signin.dart';
+import '../tree.dart';
+import 'Auth/signinold.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => SinginPage(),
+        builder: (context) => Tree(),
       ),
     );
   }

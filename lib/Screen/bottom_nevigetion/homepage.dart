@@ -1,67 +1,107 @@
-import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
-import 'package:dokan/Properties/app_properties.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import '../../export.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../../Properties/export.dart';
 
-class Homepage extends StatelessWidget {
+class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
+
+  @override
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
+  final imgs = [
+    'assets/banar2.jpeg',
+    'assets/banar3.jpeg',
+    'assets/banar4.jpeg',
+    'assets/banar5.jpeg',
+    'assets/banar6.jpeg',
+  ];
+  int activeIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.appBackground,
-      appBar: AppBar(
-        backgroundColor: AppColor.fillColorL,
-        elevation: 1,
-        leading: Builder(
-          builder: (context) {
-            return IconButton(
-              onPressed: () => Scaffold.of(context).openDrawer(),
-              icon: const Icon(
-                Icons.menu,
-                color: AppColor.appMainColor,
-              ),
-            );
-          },
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.search,
-              color: AppColor.appMainColor,
-            ),
-          ),
-        ],
-      ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-          child: SizedBox(
-            height: 250,
-            width: MediaQuery.of(context).size.width,
-            child: Carousel(
-              dotSize: 5,
-              dotBgColor: Colors.transparent,
-              images: [
-                Image.network(
-                  'https://expertphotography.b-cdn.net/wp-content/uploads/2021/01/landscape-photography-10_reupload.jpeg',
-                  fit: BoxFit.cover,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 20,
+              ),
+              child: Material(
+                elevation: 15,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 10,
+                      ),
+                      child: CarouselSlider.builder(
+                        itemCount: imgs.length,
+                        options: CarouselOptions(
+                          height: 200,
+                          autoPlay: true,
+                          enlargeCenterPage: true,
+                          viewportFraction: .7,
+                          onPageChanged: (index, reason) =>
+                              setState(() => activeIndex = index),
+                        ),
+                        itemBuilder: (context, index, realIndex) {
+                          final showImg = imgs[index];
+                          return buildImg(showImg, index);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: buildicator(),
+                    ),
+                  ],
                 ),
-                Image.network(
-                  'https://www.adobe.com/content/dam/cc/us/en/creative-cloud/photography/discover/landscape-photography/CODERED_B1_landscape_P2d_714x348.jpg.img.jpg',
-                  fit: BoxFit.cover,
-                ),
-                Image.network(
-                  'https://images.unsplash.com/photo-1611307742746-43cbea512c37?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bmF0dXJlJTIwbGFuZHNjYXBlfGVufDB8fDB8fA%3D%3D&w=1000&q=80',
-                  fit: BoxFit.cover,
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
-      drawer: const CustomDrawer(),
     );
   }
+
+  Widget buildImg(String showImg, int index) => Container(
+        decoration: BoxDecoration(
+          color: AppColor.appSecColor,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            color: AppColor.appMainColor,
+            width: 2,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 5,
+            vertical: 5,
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset(
+              showImg,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      );
+
+  Widget buildicator() => AnimatedSmoothIndicator(
+        activeIndex: activeIndex,
+        count: imgs.length,
+        effect: SwapEffect(
+          activeDotColor: AppColor.appMainColor,
+          dotColor: AppColor.appSecColor,
+          dotHeight: 10,
+          dotWidth: 10,
+        ),
+      );
 }
