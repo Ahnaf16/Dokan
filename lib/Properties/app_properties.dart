@@ -8,6 +8,16 @@ class AppColor {
   static const Color fillColorL = Colors.white;
 }
 
+//----------------------------cDivider-------------------------------------
+
+Widget cDivider(
+  double dh,
+) {
+  return SizedBox(
+    height: dh,
+  );
+}
+
 //----------------------textStyle------------------------------------------
 
 class AppTextStyle {
@@ -42,3 +52,32 @@ ButtonStyle buttonStyle = OutlinedButton.styleFrom(
     width: 2,
   ),
 );
+
+//----------------------------textfieldStyle-------------------------------------
+
+InputDecoration textfilesStyle(String labelText) {
+  return InputDecoration(
+    contentPadding: const EdgeInsets.symmetric(
+      horizontal: 15,
+      vertical: 10,
+    ),
+    labelText: labelText,
+    labelStyle: AppTextStyle.bodyTextStyle,
+    filled: true,
+    fillColor: AppColor.fillColorL,
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(15),
+      borderSide: const BorderSide(
+        color: AppColor.appMainColor,
+        width: 2,
+      ),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(15),
+      borderSide: const BorderSide(
+        color: AppColor.appMainColor,
+        width: 2,
+      ),
+    ),
+  );
+}

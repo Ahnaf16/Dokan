@@ -1,9 +1,8 @@
-import 'package:dokan/Screen/Auth/forgetpass.dart';
 import 'package:dokan/Properties/app_properties.dart';
 import 'package:dokan/Properties/export.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'signup.dart';
+import 'signupold.dart';
 
 class SinginPage extends StatefulWidget {
   const SinginPage({Key? key}) : super(key: key);
@@ -92,26 +91,26 @@ class _SinginPageState extends State<SinginPage> {
                   //     //needSaffixIcon: true,
                   //     inputTypes: TextInputType.visiblePassword,
                   //     textControl: _passwordController),
-                  TextfieldPass(
-                    true,
-                    TextInputType.visiblePassword,
-                    _passwordController,
-                  ),
+                  // TextfieldPass(
+                  //   true,
+                  //   TextInputType.visiblePassword,
+                  //   _passwordController,
+                  // ),
                   const Divider(
                     color: Colors.transparent,
                     height: 10,
                   ),
                   //-----------------------------------------------------------------
-                  Richtexts(
-                    firstText: '',
-                    secText: 'Forget Password?',
-                    roughtpage: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ForgetPassword(),
-                      ),
-                    ),
-                  )
+                  // Richtexts(
+                  //   firstText: '',
+                  //   secText: 'Forget Password?',
+                  //   roughtpage: () => Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => const ForgetPassword(),
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),

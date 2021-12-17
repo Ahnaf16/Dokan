@@ -7,7 +7,7 @@ import '../../Properties/export.dart';
 class Navibar extends StatefulWidget {
   final Function(User?) onClick;
 
-  Navibar({required this.onClick});
+  const Navibar({required this.onClick});
 
   @override
   State<Navibar> createState() => _NavibarState();
