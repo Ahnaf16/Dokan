@@ -3,7 +3,6 @@
 import 'package:dokan/Properties/export.dart';
 import 'package:dokan/Screen/Auth/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
   final Function(User?) onLogIn;
@@ -188,9 +187,7 @@ class _LoginPageState extends State<LoginPage> {
               roughtpage: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SignUpPage(
-                    onLogIn: (userCred) => onSignUp(userCred),
-                  ),
+                  builder: (context) => SignUpPage(),
                 ),
               ),
             ),

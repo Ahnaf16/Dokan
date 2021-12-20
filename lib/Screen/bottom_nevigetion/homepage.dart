@@ -1,5 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../Properties/export.dart';
 
@@ -20,51 +23,56 @@ class _HomepageState extends State<Homepage> {
   ];
   int activeIndex = 0;
 
+  final userCollection =
+      FirebaseFirestore.instance.collection('UserInfo').snapshots();
+
+  Future getUID() async {
+    return FirebaseAuth.instance.currentUser;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.appBackground,
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 20,
-              ),
-              child: Material(
-                elevation: 15,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 10,
-                      ),
-                      child: CarouselSlider.builder(
-                        itemCount: imgs.length,
-                        options: CarouselOptions(
-                          height: 200,
-                          autoPlay: true,
-                          enlargeCenterPage: true,
-                          viewportFraction: .7,
-                          onPageChanged: (index, reason) =>
-                              setState(() => activeIndex = index),
-                        ),
-                        itemBuilder: (context, index, realIndex) {
-                          final showImg = imgs[index];
-                          return buildImg(showImg, index);
-                        },
-                      ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 20,
+            ),
+            child: Material(
+              elevation: 15,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 10,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: buildicator(),
+                    child: CarouselSlider.builder(
+                      itemCount: imgs.length,
+                      options: CarouselOptions(
+                        height: 200,
+                        autoPlay: true,
+                        enlargeCenterPage: true,
+                        viewportFraction: .7,
+                        onPageChanged: (index, reason) =>
+                            setState(() => activeIndex = index),
+                      ),
+                      itemBuilder: (context, index, realIndex) {
+                        final showImg = imgs[index];
+                        return buildImg(showImg, index);
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: buildicator(),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
