@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unused_local_variable, avoid_print
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,20 +14,33 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  final imgs = [
-    'assets/banar2.jpeg',
-    'assets/banar3.jpeg',
-    'assets/banar4.jpeg',
-    'assets/banar5.jpeg',
-    'assets/banar6.jpeg',
-  ];
-  int activeIndex = 0;
+  //
 
-  final userCollection =
-      FirebaseFirestore.instance.collection('UserInfo').snapshots();
+  int dotPosition = 0;
 
-  Future getUID() async {
-    return FirebaseAuth.instance.currentUser;
+  List<String> imgForSlider = [];
+
+  final _firestore = FirebaseFirestore.instance;
+
+  getSliderImgs() async {
+    try {
+      QuerySnapshot qn = await _firestore.collection('Slider').get();
+      setState(() {
+        for (int i = 0; i < qn.docs.length; i++) {
+          imgForSlider.add(
+            qn.docs[i]['img'],
+          );
+        }
+      });
+    } on Exception catch (e) {
+      print(e.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getSliderImgs();
   }
 
   @override
@@ -40,37 +53,41 @@ class _HomepageState extends State<Homepage> {
             padding: const EdgeInsets.symmetric(
               vertical: 20,
             ),
-            child: Material(
-              elevation: 15,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 10,
-                    ),
-                    child: CarouselSlider.builder(
-                      itemCount: imgs.length,
-                      options: CarouselOptions(
-                        height: 200,
-                        autoPlay: true,
-                        enlargeCenterPage: true,
-                        viewportFraction: .7,
-                        onPageChanged: (index, reason) =>
-                            setState(() => activeIndex = index),
+            child: Column(
+              children: [
+                Material(
+                  elevation: 15,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 10,
+                        ),
+                        child: CarouselSlider.builder(
+                          itemCount: imgForSlider.length,
+                          options: CarouselOptions(
+                            height: 170,
+                            autoPlay: true,
+                            enlargeCenterPage: true,
+                            viewportFraction: 1,
+                            onPageChanged: (index, reason) =>
+                                setState(() => dotPosition = index),
+                          ),
+                          itemBuilder: (context, index, realIndex) {
+                            final showImg = imgForSlider[index];
+                            return buildImg(showImg, index);
+                          },
+                        ),
                       ),
-                      itemBuilder: (context, index, realIndex) {
-                        final showImg = imgs[index];
-                        return buildImg(showImg, index);
-                      },
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: buildIndicator(),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: buildicator(),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -94,17 +111,17 @@ class _HomepageState extends State<Homepage> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
+            child: Image.network(
               showImg,
-              fit: BoxFit.cover,
+              fit: BoxFit.fitWidth,
             ),
           ),
         ),
       );
 
-  Widget buildicator() => AnimatedSmoothIndicator(
-        activeIndex: activeIndex,
-        count: imgs.length,
+  Widget buildIndicator() => AnimatedSmoothIndicator(
+        activeIndex: dotPosition,
+        count: imgForSlider.length,
         effect: SwapEffect(
           activeDotColor: AppColor.appMainColor,
           dotColor: AppColor.appSecColor,
