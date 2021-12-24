@@ -65,6 +65,12 @@ class _HomepageState extends State<Homepage> {
                 color: AppColor.appMainColor,
               ),
             );
+          }
+          if (snapshot.hasError) {
+            return Text('Error loadimg data');
+          }
+          if (snapshot.connectionState == ConnectionState.none) {
+            return Text('No network');
           } else {
             return Padding(
               padding: const EdgeInsets.symmetric(
