@@ -21,7 +21,7 @@ class Details extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            productImgs(),
+            productImgs(context),
             cDivider(30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -52,7 +52,7 @@ class Details extends StatelessWidget {
     );
   }
 
-  Material productImgs() {
+  Material productImgs(context) {
     return Material(
       color: AppColor.appSecColor,
       elevation: 10,
@@ -60,7 +60,7 @@ class Details extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: SizedBox(
           height: 200,
-          width: 400,
+          width: MediaQuery.of(context).size.width,
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 1,
