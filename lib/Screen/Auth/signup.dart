@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, prefer_const_constructors_in_immutables
 import 'package:dokan/Properties/export.dart';
-import 'package:dokan/services/firebasefirestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
@@ -26,8 +25,9 @@ class _SignUpPageState extends State<SignUpPage> {
       );
 
       userCredential.user!.updateDisplayName(userName);
-      var authCredential = userCredential.user;
+      //  userCredential.user!.
 
+      var authCredential = userCredential.user;
       if (authCredential!.uid.isNotEmpty) {
         Navigator.pop(context);
       } else {

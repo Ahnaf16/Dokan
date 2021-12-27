@@ -73,125 +73,127 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            cDivider(100),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              cDivider(100),
 
-            Text(
-              'Log In',
-              style: AppTextStyle.headerStyle,
-            ),
-
-            cDivider(100),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 40,
-                vertical: 10,
+              Text(
+                'Log In',
+                style: AppTextStyle.headerStyle,
               ),
-              child: TextField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                style: AppTextStyle.bodyTextStyle,
-                decoration: textfilesStyle('Email'),
-              ),
-            ),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 40,
-                vertical: 10,
+              cDivider(100),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 10,
+                ),
+                child: TextField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  style: AppTextStyle.bodyTextStyle,
+                  decoration: textfilesStyle('Email'),
+                ),
               ),
-              child: TextField(
-                controller: _passwordController,
-                obscureText: isPassword,
-                style: AppTextStyle.bodyTextStyle,
-                decoration: textfilesStyle('Password').copyWith(
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isPassword = !isPassword;
-                      });
-                    },
-                    icon: Icon(
-                      isPassword ? Icons.visibility_off : Icons.visibility,
-                      color: AppColor.appMainColor,
+
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 10,
+                ),
+                child: TextField(
+                  controller: _passwordController,
+                  obscureText: isPassword,
+                  style: AppTextStyle.bodyTextStyle,
+                  decoration: textfilesStyle('Password').copyWith(
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isPassword = !isPassword;
+                        });
+                      },
+                      icon: Icon(
+                        isPassword ? Icons.visibility_off : Icons.visibility,
+                        color: AppColor.appMainColor,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
 
-            cDivider(5),
+              cDivider(5),
 
-            Text(
-              error,
-              style: AppTextStyle.errorText,
-            ),
-
-            cDivider(50),
-
-//----------------------------button-------------------------------------
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  OutlinedButton(
-                    onPressed: () async {
-                      if (loginLoading) return;
-                      setState(() {
-                        loginLoading = true;
-                      });
-                      await logIn();
-                      loginLoading = false;
-                    },
-                    style: buttonStyle,
-                    child: loginLoading
-                        ? CircularProgressIndicator(
-                            color: AppColor.appMainColor,
-                          )
-                        : Text(
-                            'Log In',
-                            style: AppTextStyle.bodyTextStyle,
-                          ),
-                  ),
-                  // OutlinedButton(
-                  //   onPressed: () async {
-                  //     if (isloading) return;
-                  //     setState(() {
-                  //       isloading = true;
-                  //     });
-                  //     await guestLogIn();
-                  //   },
-                  //   style: buttonStyle,
-                  //   child: isloading
-                  //       ? CircularProgressIndicator(
-                  //           color: AppColor.appMainColor,
-                  //         )
-                  //       : Text(
-                  //           'Guest LogIn',
-                  //           style: AppTextStyle.bodyTextStyle,
-                  //         ),
-                  // ),
-                ],
+              Text(
+                error,
+                style: AppTextStyle.errorText,
               ),
-            ),
 
-            cDivider(8),
+              cDivider(50),
 
-            Richtexts(
-              firstText: 'Don\'t have an account? ',
-              secText: 'Sign Up',
-              roughtpage: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SignUpPage(),
+              //----------------------------button-------------------------------------
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    OutlinedButton(
+                      onPressed: () async {
+                        if (loginLoading) return;
+                        setState(() {
+                          loginLoading = true;
+                        });
+                        await logIn();
+                        loginLoading = false;
+                      },
+                      style: buttonStyle,
+                      child: loginLoading
+                          ? CircularProgressIndicator(
+                              color: AppColor.appMainColor,
+                            )
+                          : Text(
+                              'Log In',
+                              style: AppTextStyle.bodyTextStyle,
+                            ),
+                    ),
+                    // OutlinedButton(
+                    //   onPressed: () async {
+                    //     if (isloading) return;
+                    //     setState(() {
+                    //       isloading = true;
+                    //     });
+                    //     await guestLogIn();
+                    //   },
+                    //   style: buttonStyle,
+                    //   child: isloading
+                    //       ? CircularProgressIndicator(
+                    //           color: AppColor.appMainColor,
+                    //         )
+                    //       : Text(
+                    //           'Guest LogIn',
+                    //           style: AppTextStyle.bodyTextStyle,
+                    //         ),
+                    // ),
+                  ],
                 ),
               ),
-            ),
-          ],
+
+              cDivider(8),
+
+              Richtexts(
+                firstText: 'Don\'t have an account? ',
+                secText: 'Sign Up',
+                roughtpage: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SignUpPage(),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

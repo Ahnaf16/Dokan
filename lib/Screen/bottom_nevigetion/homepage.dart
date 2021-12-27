@@ -2,6 +2,7 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dokan/Screen/descriotion.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../Properties/export.dart';
 
@@ -172,61 +173,76 @@ class _HomepageState extends State<Homepage> {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
                         DocumentSnapshot data = snapshot.data[index];
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadiusDirectional.circular(15),
-                            side: const BorderSide(
-                                color: AppColor.appMainColor, width: 2),
-                          ),
-                          elevation: 0,
-                          child: Stack(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 5),
-                                child: Align(
-                                  alignment: Alignment.topCenter,
-                                  child: Container(
-                                    height: 160,
-                                    width: 160,
-                                    decoration: BoxDecoration(
-                                      color: AppColor.appSecColor,
-                                      borderRadius: BorderRadius.circular(15),
-                                      image: DecorationImage(
-                                        image: NetworkImage(
-                                          data["img"][0],
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => Details(
+                                  pName: data["name"],
+                                  pPrice: data["price"],
+                                  pImg: data["img"],
+                                ),
+                              ),
+                            );
+                          },
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadiusDirectional.circular(15),
+                              side: const BorderSide(
+                                  color: AppColor.appMainColor, width: 2),
+                            ),
+                            elevation: 0,
+                            child: Stack(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: Align(
+                                    alignment: Alignment.topCenter,
+                                    child: Container(
+                                      height: 160,
+                                      width: 160,
+                                      decoration: BoxDecoration(
+                                        color: AppColor.appSecColor,
+                                        borderRadius: BorderRadius.circular(15),
+                                        image: DecorationImage(
+                                          image: NetworkImage(
+                                            data["img"][0],
+                                          ),
+                                          // fit: BoxFit.fitWidth,
                                         ),
-                                        // fit: BoxFit.fitWidth,
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft +
-                                    const Alignment(0, .6),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 15, right: 10),
-                                  child: Text(
-                                    data["name"],
-                                    style: AppTextStyle.smallTextStyle,
+                                Align(
+                                  alignment: Alignment.centerLeft +
+                                      const Alignment(0, .6),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15, right: 10),
+                                    child: Text(
+                                      data["name"],
+                                      style: AppTextStyle.smallTextStyle,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomLeft +
-                                    const Alignment(0, -.1),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 15,
+                                Align(
+                                  alignment: Alignment.bottomLeft +
+                                      const Alignment(0, -.1),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 15,
+                                    ),
+                                    child: Text(
+                                      data["price"],
+                                      style: AppTextStyle.smallTextStyle,
+                                    ),
                                   ),
-                                  child: Text(
-                                    data["price"],
-                                    style: AppTextStyle.smallTextStyle,
-                                  ),
-                                ),
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
                         );
                       },

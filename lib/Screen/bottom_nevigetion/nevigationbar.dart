@@ -106,7 +106,7 @@ class _NavibarState extends State<Navibar> {
       ),
       title: Text(
         'Dokan',
-        style: AppTextStyle.headerStyle,
+        style: AppTextStyle.bodyTextStyle,
       ),
       centerTitle: true,
       actions: [

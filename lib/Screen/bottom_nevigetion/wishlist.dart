@@ -1,4 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore_for_file: prefer_const_literals_to_create_immutables ,prefer_const_constructors
+
 import 'package:dokan/Properties/export.dart';
 
 class Wishlist extends StatefulWidget {
@@ -11,20 +12,29 @@ class Wishlist extends StatefulWidget {
 class _WishlistState extends State<Wishlist> {
   //
 
+  List<String> displayPics = [
+    'assets/dp1.jpg',
+    'assets/dp2.jpg',
+    'assets/dp3.jpg',
+    'assets/dp4.jpg',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.appBackground,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            children: const [
-              Text(
-                'wishlist',
-                style: AppTextStyle.headerStyle,
-              ),
-            ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: Column(
+              children: [
+                const Text(
+                  'wishlist',
+                  style: AppTextStyle.headerStyle,
+                ),
+              ],
+            ),
           ),
         ),
       ),
