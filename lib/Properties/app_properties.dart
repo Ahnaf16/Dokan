@@ -36,6 +36,11 @@ class AppTextStyle {
     color: AppColor.appMainColor,
     fontSize: 18,
   );
+
+  static const TextStyle errorText = TextStyle(
+    color: Colors.red,
+    fontSize: 18,
+  );
 }
 
 //----------------------------buttonStyle-------------------------------------

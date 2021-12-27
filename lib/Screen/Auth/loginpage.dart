@@ -3,11 +3,10 @@
 import 'package:dokan/Properties/export.dart';
 import 'package:dokan/Screen/Auth/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  final Function(User?) onGuestLogIn;
-  LoginPage({required this.onGuestLogIn});
+  final Function(User?) onLogIn;
+  LoginPage({required this.onLogIn});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -16,132 +15,185 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   //----------------------------guest Login-------------------------------------
 
-  guestLogIn() async {
+  Future guestLogIn() async {
     UserCredential userCredential =
         await FirebaseAuth.instance.signInAnonymously();
-    widget.onGuestLogIn(userCredential.user);
+    widget.onLogIn(userCredential.user);
   }
+
 //------------------------------------------------------------------------------
 
+  Future logIn() async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      var authCredential = userCredential.user;
+
+      if (authCredential!.uid.isNotEmpty) {
+        error = 'Login success';
+      } else {
+        error = 'Something is Wrong';
+      }
+      widget.onLogIn(userCredential.user);
+    } on FirebaseException catch (e) {
+      setState(() {
+        error = e.message!;
+        if (e.code == 'user-not-found') {
+          error = 'No user found for that email.';
+        } else if (e.code == 'wrong-password') {
+          error = 'Wrong password provided for that user.';
+
+          if (e.message == 'Given String is empty or null') {
+            error = 'Please enter a email';
+          }
+        }
+      });
+    }
+  }
+
+  onSignUp(userCred) {
+    setState(() {
+      user = userCred;
+      widget.onLogIn(user);
+    });
+  }
+
+  String error = '';
+  User? user;
   bool isloading = false;
   bool loginLoading = false;
   bool isPassword = true;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            cDivider(100),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              cDivider(100),
 
-            Text(
-              'Log In',
-              style: AppTextStyle.headerStyle,
-            ),
-
-            cDivider(100),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 40,
-                vertical: 10,
+              Text(
+                'Log In',
+                style: AppTextStyle.headerStyle,
               ),
-              child: TextField(
-                //controller: ,
-                keyboardType: TextInputType.emailAddress,
-                style: AppTextStyle.bodyTextStyle,
-                decoration: textfilesStyle('Email'),
-              ),
-            ),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 40,
-                vertical: 10,
-              ),
-              child: TextField(
-                //controller: ,
-                obscureText: isPassword,
+              cDivider(100),
 
-                style: AppTextStyle.bodyTextStyle,
-                decoration: textfilesStyle('Password').copyWith(
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isPassword = !isPassword;
-                      });
-                    },
-                    icon: Icon(
-                      isPassword ? Icons.visibility_off : Icons.visibility,
-                      color: AppColor.appMainColor,
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 10,
+                ),
+                child: TextField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  style: AppTextStyle.bodyTextStyle,
+                  decoration: textfilesStyle('Email'),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 10,
+                ),
+                child: TextField(
+                  controller: _passwordController,
+                  obscureText: isPassword,
+                  style: AppTextStyle.bodyTextStyle,
+                  decoration: textfilesStyle('Password').copyWith(
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isPassword = !isPassword;
+                        });
+                      },
+                      icon: Icon(
+                        isPassword ? Icons.visibility_off : Icons.visibility,
+                        color: AppColor.appMainColor,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
 
-            cDivider(50),
+              cDivider(5),
 
-//----------------------------button-------------------------------------
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  OutlinedButton(
-                    onPressed: () {
-                      if (loginLoading) return;
-                      setState(() {
-                        loginLoading = true;
-                      });
-                    },
-                    style: buttonStyle,
-                    child: loginLoading
-                        ? CircularProgressIndicator(
-                            color: AppColor.appMainColor,
-                          )
-                        : Text(
-                            'Log In',
-                            style: AppTextStyle.bodyTextStyle,
-                          ),
-                  ),
-                  OutlinedButton(
-                    onPressed: () async {
-                      if (isloading) return;
-                      setState(() {
-                        isloading = true;
-                      });
-                      await guestLogIn();
-                    },
-                    style: buttonStyle,
-                    child: isloading
-                        ? CircularProgressIndicator(
-                            color: AppColor.appMainColor,
-                          )
-                        : Text(
-                            'Guest LogIn',
-                            style: AppTextStyle.bodyTextStyle,
-                          ),
-                  ),
-                ],
+              Text(
+                error,
+                style: AppTextStyle.errorText,
               ),
-            ),
 
-            cDivider(8),
+              cDivider(50),
 
-            Richtexts(
-              firstText: 'Don\'t have an account? ',
-              secText: 'Sign Up',
-              roughtpage: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SignUpPage(),
+              //----------------------------button-------------------------------------
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    OutlinedButton(
+                      onPressed: () async {
+                        if (loginLoading) return;
+                        setState(() {
+                          loginLoading = true;
+                        });
+                        await logIn();
+                        loginLoading = false;
+                      },
+                      style: buttonStyle,
+                      child: loginLoading
+                          ? CircularProgressIndicator(
+                              color: AppColor.appMainColor,
+                            )
+                          : Text(
+                              'Log In',
+                              style: AppTextStyle.bodyTextStyle,
+                            ),
+                    ),
+                    // OutlinedButton(
+                    //   onPressed: () async {
+                    //     if (isloading) return;
+                    //     setState(() {
+                    //       isloading = true;
+                    //     });
+                    //     await guestLogIn();
+                    //   },
+                    //   style: buttonStyle,
+                    //   child: isloading
+                    //       ? CircularProgressIndicator(
+                    //           color: AppColor.appMainColor,
+                    //         )
+                    //       : Text(
+                    //           'Guest LogIn',
+                    //           style: AppTextStyle.bodyTextStyle,
+                    //         ),
+                    // ),
+                  ],
                 ),
               ),
-            ),
-          ],
+
+              cDivider(8),
+
+              Richtexts(
+                firstText: 'Don\'t have an account? ',
+                secText: 'Sign Up',
+                roughtpage: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SignUpPage(),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -29,7 +29,7 @@ class _TreeState extends State<Tree> {
   Widget build(BuildContext context) {
     if (user == null) {
       return LoginPage(
-        onGuestLogIn: (userCred) => onRefresh(userCred),
+        onLogIn: (userCred) => onRefresh(userCred),
       );
     }
     return Navibar(

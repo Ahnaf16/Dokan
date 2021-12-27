@@ -12,6 +12,11 @@ class CustomDrawer extends StatelessWidget {
     onlogout(null);
   }
 
+  final User? _currentUser = FirebaseAuth.instance.currentUser;
+  Future getUID() async {
+    return FirebaseAuth.instance.currentUser;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -43,19 +48,30 @@ class CustomDrawer extends StatelessWidget {
                         ),
                       ),
                       Align(
-                        alignment:
-                            Alignment.bottomCenter + const Alignment(0, -.5),
-                        child: const Text(
-                          'Ahnaf Sakil',
-                          style: AppTextStyle.bodyTextStyle,
-                        ),
-                      ),
-                      Align(
-                        alignment:
-                            Alignment.bottomCenter + const Alignment(0, -.1),
-                        child: const Text(
-                          'ahnafsakil9@gmail.com',
-                          style: AppTextStyle.smallTextStyle,
+                        alignment: Alignment.bottomCenter,
+                        child: FutureBuilder(
+                          future: getUID(),
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '${snapshot.data.displayName}',
+                                    style: AppTextStyle.bodyTextStyle,
+                                  ),
+                                  Text(
+                                    '${snapshot.data.email}',
+                                    style: AppTextStyle.smallTextStyle,
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return const Text('error');
+                            }
+                          },
                         ),
                       ),
                     ],
