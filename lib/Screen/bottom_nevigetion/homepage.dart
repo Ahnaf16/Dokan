@@ -35,15 +35,17 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       backgroundColor: AppColor.appBackground,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              imgSlider(),
-              cDivider(30),
-              productList(),
-            ],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                imgSlider(),
+                cDivider(30),
+                productList(),
+              ],
+            ),
           ),
         ),
       ),

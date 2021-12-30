@@ -1,4 +1,5 @@
 import 'package:dokan/Properties/export.dart';
+import 'package:dokan/Screen/Auth/userprofile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -12,7 +13,6 @@ class CustomDrawer extends StatelessWidget {
     onlogout(null);
   }
 
-  final User? _currentUser = FirebaseAuth.instance.currentUser;
   Future getUID() async {
     return FirebaseAuth.instance.currentUser;
   }
@@ -33,21 +33,6 @@ class CustomDrawer extends StatelessWidget {
                   child: Stack(
                     children: [
                       Align(
-                        alignment: Alignment.center + const Alignment(0, -1),
-                        child: const CircleAvatar(
-                          radius: 50.0,
-                          backgroundColor: Colors.transparent,
-                          backgroundImage: AssetImage('assets/profile.jpg'),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center + const Alignment(.3, 0),
-                        child: const Icon(
-                          Icons.verified,
-                          color: Colors.green,
-                        ),
-                      ),
-                      Align(
                         alignment: Alignment.bottomCenter,
                         child: FutureBuilder(
                           future: getUID(),
@@ -55,16 +40,59 @@ class CustomDrawer extends StatelessWidget {
                               (BuildContext context, AsyncSnapshot snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
-                              return Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                              final userdata = snapshot.data;
+                              return Stack(
                                 children: [
-                                  Text(
-                                    '${snapshot.data.displayName}',
-                                    style: AppTextStyle.bodyTextStyle,
+                                  InkWell(
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => UserDetails(),
+                                      ),
+                                    ),
+                                    child: Align(
+                                      alignment: Alignment.center +
+                                          const Alignment(0, -1),
+                                      child: CircleAvatar(
+                                        radius: 50.0,
+                                        backgroundColor: AppColor.appMainColor,
+                                        child: Text(
+                                          userdata.displayName == null
+                                              ? 'name'
+                                              : userdata.displayName[0]
+                                                  .toString()
+                                                  .toUpperCase(),
+                                          style:
+                                              AppTextStyle.headerStyle.copyWith(
+                                            color: AppColor.appSecColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  Text(
-                                    '${snapshot.data.email}',
-                                    style: AppTextStyle.smallTextStyle,
+                                  Align(
+                                    alignment: Alignment.center +
+                                        const Alignment(.3, 0),
+                                    child: const Icon(
+                                      Icons.verified,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center +
+                                        const Alignment(0, .5),
+                                    child: Text(
+                                      userdata.displayName ?? 'name',
+                                      style: AppTextStyle.bodyTextStyle,
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center +
+                                        const Alignment(0, .9),
+                                    child: Text(
+                                      userdata.email,
+                                      style: AppTextStyle.smallTextStyle,
+                                    ),
                                   ),
                                 ],
                               );
@@ -80,7 +108,10 @@ class CustomDrawer extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {},
-                title: const Text('My Orders'),
+                title: const Text(
+                  'My Orders',
+                  style: AppTextStyle.smallTextStyle,
+                ),
                 leading: const Icon(
                   Icons.shopping_cart_outlined,
                   color: AppColor.appMainColor,
@@ -88,7 +119,10 @@ class CustomDrawer extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {},
-                title: const Text('Voucher'),
+                title: const Text(
+                  'Voucher',
+                  style: AppTextStyle.smallTextStyle,
+                ),
                 leading: const Icon(
                   Icons.local_offer_outlined,
                   color: AppColor.appMainColor,
@@ -96,7 +130,10 @@ class CustomDrawer extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {},
-                title: const Text('Offers & rewords'),
+                title: const Text(
+                  'Offers & rewords',
+                  style: AppTextStyle.smallTextStyle,
+                ),
                 leading: const Icon(
                   LineIcons.trophy,
                   color: AppColor.appMainColor,
@@ -104,7 +141,10 @@ class CustomDrawer extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {},
-                title: const Text('Help'),
+                title: const Text(
+                  'Help',
+                  style: AppTextStyle.smallTextStyle,
+                ),
                 leading: const Icon(
                   LineIcons.question,
                   color: AppColor.appMainColor,
@@ -112,14 +152,17 @@ class CustomDrawer extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {},
-                title: const Text('Settings'),
+                title: const Text(
+                  'Settings',
+                  style: AppTextStyle.smallTextStyle,
+                ),
                 leading: const Icon(
                   LineIcons.cog,
                   color: AppColor.appMainColor,
                 ),
               ),
-              const SizedBox(
-                height: 470,
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 3.5,
               ),
               ListTile(
                 onTap: () {

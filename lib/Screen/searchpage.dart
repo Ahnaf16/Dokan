@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dokan/Properties/export.dart';
+import 'package:dokan/Screen/descriotion.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -116,6 +117,16 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                         ),
                         child: ListTile(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => Details(
+                                pName: name,
+                                pPrice: '',
+                                pImg: data["img"],
+                              ),
+                            ),
+                          ),
                           title: Text(name),
                           leading: Image.network(img),
                         ),

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, prefer_const_constructors_in_immutables
 import 'package:dokan/Properties/export.dart';
+import 'package:dokan/services/firebasefirestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
@@ -24,7 +25,7 @@ class _SignUpPageState extends State<SignUpPage> {
         password: _passwordController.text,
       );
 
-      userCredential.user!.updateDisplayName(userName);
+      userCredential.user!.updateDisplayName(_nameController.text);
       //  userCredential.user!.
 
       var authCredential = userCredential.user;
@@ -44,21 +45,19 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  test(userCred) {
-    setState(() {
-      user = userCred;
-    });
-  }
-
   User? user;
   String? userName;
   String? userMail;
+  String? phone;
+  String? address;
+
   String error = '';
   String password = '';
   bool isloading = false;
   bool isPassword = true;
   bool isPassword2 = true;
 
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPassController = TextEditingController();
@@ -88,7 +87,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     vertical: 10,
                   ),
                   child: TextFormField(
-                    onChanged: (value) => userName = value,
+                    controller: _nameController,
+                    //onChanged: (value) => userName = value,
                     keyboardType: TextInputType.emailAddress,
                     style: AppTextStyle.bodyTextStyle,
                     decoration: textfilesStyle('Name'),
@@ -103,7 +103,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     vertical: 10,
                   ),
                   child: TextFormField(
-                    onChanged: (value) => userMail = value,
+                    //onChanged: (value) => userMail = value,
                     autovalidateMode: AutovalidateMode.disabled,
                     validator: EmailValidator(errorText: 'Invalid Email'),
                     controller: _emailController,
@@ -201,7 +201,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     });
                     if (formkey.currentState!.validate()) {
                       await signUp();
-                      //sendUserName2(userName, userMail);
+                      sendUserNameDB(_nameController.text,
+                          _emailController.text, phone, address);
                     }
                     isloading = false;
                   },
