@@ -8,3 +8,4 @@ export 'package:dokan/Screen/bottom_nevigetion/wishlist.dart';
 export 'package:dokan/Screen/bottom_nevigetion/homepage.dart';
 export 'package:dokan/Screen/bottom_nevigetion/nevigationbar.dart';
 export 'package:dokan/Screen/appdrawer.dart';
+export 'package:dokan/Screen/searchpage.dart';

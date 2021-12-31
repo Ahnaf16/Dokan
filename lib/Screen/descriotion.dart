@@ -2,16 +2,22 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dokan/Properties/export.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import 'searchpage.dart';
-
-class Details extends StatelessWidget {
-  const Details(
-      {required this.pName, required this.pPrice, required this.pImg});
+class Details extends StatefulWidget {
+  Details({required this.pName, required this.pPrice, required this.pImg});
 
   final String pName;
   final String pPrice;
   final List pImg;
+
+  @override
+  State<Details> createState() => _DetailsState();
+}
+
+class _DetailsState extends State<Details> {
+  int dots = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +27,12 @@ class Details extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            productImgs(),
+            imgSlider(),
             cDivider(30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Text(
-                pName,
+                widget.pName,
                 style: AppTextStyle.bodyTextStyle,
               ),
             ),
@@ -34,7 +40,7 @@ class Details extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Text(
-                'Price : $pPrice',
+                'Price : ${widget.pPrice}',
                 style: AppTextStyle.bodyTextStyle,
               ),
             ),
@@ -49,38 +55,118 @@ class Details extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: SizedBox(
+        width: 100,
+        child: FloatingActionButton(
+          backgroundColor: AppColor.appMainColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          isExtended: true,
+          onPressed: () {},
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                onPressed: () {
+                  Fluttertoast.showToast(
+                    msg: 'wishlist has not implemented yet',
+                    backgroundColor: AppColor.appSecColor,
+                    textColor: AppColor.appSecColor,
+                    toastLength: Toast.LENGTH_SHORT,
+                  );
+                  print('wishlist');
+                },
+                icon: Icon(
+                  Icons.favorite_outline,
+                  color: AppColor.appSecColor,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  Fluttertoast.showToast(
+                    msg: 'Cart has not implemented yet',
+                    backgroundColor: AppColor.appSecColor,
+                    textColor: AppColor.appSecColor,
+                    toastLength: Toast.LENGTH_SHORT,
+                  );
+                  print('cart');
+                },
+                icon: Icon(
+                  Icons.add_shopping_cart,
+                  color: AppColor.appSecColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  Material productImgs() {
+  Material imgSlider() {
     return Material(
-      color: AppColor.appSecColor,
       elevation: 10,
+      color: AppColor.appSecColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusDirectional.circular(10),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: SizedBox(
-          height: 200,
-          width: 400,
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 1,
+        child: Column(
+          children: [
+            CarouselSlider.builder(
+              itemCount: widget.pImg.length,
+              options: CarouselOptions(
+                initialPage: 1,
+                enableInfiniteScroll: false,
+                height: 200,
+                viewportFraction: .54,
+                onPageChanged: (index, reason) => setState(() {
+                  dots = index;
+                }),
+              ),
+              itemBuilder: (context, index, realindex) {
+                return Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Container(
+                    width: 200,
+                    decoration: BoxDecoration(
+                      color: AppColor.appSecColor,
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        color: AppColor.appMainColor,
+                        width: 2,
+                      ),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          widget.pImg[index],
+                        ),
+                        // fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-            scrollDirection: Axis.horizontal,
-            itemCount: pImg.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Card(
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadiusDirectional.circular(15),
-                  side:
-                      const BorderSide(color: AppColor.appMainColor, width: 2),
-                ),
-                child: Image.network(
-                  pImg[index],
-                ),
-              );
-            },
-          ),
+            cDivider(10),
+            dotIndicator(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Center dotIndicator() {
+    return Center(
+      child: AnimatedSmoothIndicator(
+        activeIndex: dots,
+        count: widget.pImg.length,
+        effect: const SwapEffect(
+          activeDotColor: AppColor.appMainColor,
+          dotColor: Colors.grey,
+          dotHeight: 10,
+          dotWidth: 10,
         ),
       ),
     );
