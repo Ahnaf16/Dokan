@@ -74,6 +74,7 @@ class EditUserDetails extends StatelessWidget {
                       TextFormField(
                         controller: _nameController =
                             TextEditingController(text: snapshot.data!["name"]),
+                        style: AppTextStyle.smallTextStyle,
                         decoration: textfilesStyle('Name'),
                       ),
                       cDivider(20),
@@ -82,18 +83,22 @@ class EditUserDetails extends StatelessWidget {
                         // readOnly: true,
                         controller: _emailController = TextEditingController(
                             text: snapshot.data!["email"]),
+                        style: AppTextStyle.smallTextStyle,
+
                         decoration: textfilesStyle('Email'),
                       ),
                       cDivider(20),
                       TextFormField(
                         controller: _phoneController = TextEditingController(
                             text: snapshot.data!["phone"]),
+                        style: AppTextStyle.smallTextStyle,
                         decoration: textfilesStyle('Phone'),
                       ),
                       cDivider(20),
                       TextFormField(
                         controller: _addressController = TextEditingController(
                             text: snapshot.data!["address"]),
+                        style: AppTextStyle.smallTextStyle,
                         decoration: textfilesStyle('Address'),
                       ),
                       cDivider(70),
