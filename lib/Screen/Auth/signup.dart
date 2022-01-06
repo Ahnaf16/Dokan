@@ -162,7 +162,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         MatchValidator(errorText: 'Passwod did\'t match')
                             .validateMatch(value!, password),
                     controller: _confirmPassController,
-                    obscureText: isPassword,
+                    obscureText: isPassword2,
                     style: AppTextStyle.bodyTextStyle,
                     decoration: textfilesStyle('Confirm Password').copyWith(
                       suffixIcon: InkWell(

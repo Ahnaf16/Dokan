@@ -1,136 +1,421 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dokan/Properties/export.dart';
-import 'package:dokan/Screen/Auth/edituserdetails.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserDetails extends StatefulWidget {
+  const UserDetails({Key? key}) : super(key: key);
+
+//
   @override
   State<UserDetails> createState() => _UserDetailsState();
 }
 
 class _UserDetailsState extends State<UserDetails> {
-//
-  User? _currentUser = FirebaseAuth.instance.currentUser!;
+  //
 
-  getdata() {
+//show user data
+  getUserData() {
     return FirebaseFirestore.instance
         .collection("UserInfo")
         .doc(_currentUser!.email)
         .snapshots();
   }
 
-  @override
-  void initState() {
-    setState(() {});
-    super.initState();
+//update user data
+  updateUserInfo() {
+    FirebaseFirestore.instance
+        .collection('UserInfo')
+        .doc(_currentUser!.email)
+        .update({
+      "name": _nameController!.text,
+      "email": _emailController!.text,
+      "phone": _phoneController!.text,
+      "address": _addressController!.text,
+    }).then(
+      (value) => Fluttertoast.showToast(
+        msg: 'Update complete',
+        backgroundColor: AppColor.appSecColor,
+        textColor: AppColor.appMainColor,
+      ),
+    );
   }
+
+  //update user name
+  updateAuthName() {
+    return _currentUser!.updateDisplayName(_nameController!.text);
+  }
+
+  Future selectImg(ImageSource imgSource) async {
+    try {
+      final pickImg = await ImagePicker().pickImage(source: imgSource);
+
+      if (pickImg == null) {
+        return Fluttertoast.showToast(
+          msg: 'No image selected',
+        );
+      }
+
+      final cropped = await ImageCropper.cropImage(
+        sourcePath: pickImg.path,
+        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+        compressQuality: 100,
+        compressFormat: ImageCompressFormat.jpg,
+        maxHeight: 700,
+        maxWidth: 700,
+        androidUiSettings: AndroidUiSettings(
+          backgroundColor: AppColor.appSecColor,
+          toolbarColor: AppColor.appSecColor,
+          toolbarWidgetColor: AppColor.appMainColor,
+          activeControlsWidgetColor: AppColor.appSecColor,
+          dimmedLayerColor: AppColor.appSecColor.withOpacity(.5),
+          cropFrameColor: AppColor.appMainColor,
+          cropGridColor: AppColor.appMainColor,
+          toolbarTitle: 'Crop Image',
+          cropGridStrokeWidth: 2,
+        ),
+      );
+
+      setState(
+        () {
+          _pickedImg = cropped;
+        },
+      );
+    } on PlatformException catch (e) {
+      Fluttertoast.showToast(msg: 'Faield to select image');
+      print('Error: $e');
+    }
+  }
+
+  TextEditingController? _nameController;
+  TextEditingController? _emailController;
+  TextEditingController? _phoneController;
+  TextEditingController? _addressController;
+  final User? _currentUser = FirebaseAuth.instance.currentUser!;
+  bool enableEdit = false;
+  File? _pickedImg;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBar(context),
-        body: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: StreamBuilder<DocumentSnapshot>(
-                  stream: getdata(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return CircularProgressIndicator(
-                        color: AppColor.appMainColor,
-                      );
-                    }
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        cDivider(20),
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: CircleAvatar(
-                              radius: 60,
-                              backgroundColor: AppColor.appMainColor,
-                              child: Text(
-                                'd',
-                                style: AppTextStyle.headerStyle.copyWith(
-                                  color: AppColor.appSecColor,
+      appBar: appBar(context),
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: StreamBuilder<DocumentSnapshot>(
+              stream: getUserData(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return CircularProgressIndicator(
+                    color: AppColor.appMainColor,
+                  );
+                }
+                return Column(
+                  children: [
+                    cDivider(20),
+
+                    //----------------------------dp-------------------------------------
+
+                    Material(
+                      elevation: 10,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusDirectional.circular(15),
+                      ),
+                      color: AppColor.appSecColor,
+                      shadowColor: AppColor.appMainColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Material(
+                              elevation: 10,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadiusDirectional.circular(50),
+                              ),
+                              shadowColor: AppColor.appMainColor,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(180),
+                                child: Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    color: AppColor.appMainColor,
+                                    borderRadius: BorderRadius.circular(180),
+                                  ),
+                                  child: _pickedImg == null
+                                      ? FittedBox(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(13),
+                                            child: Text(
+                                              snapshot.data!["name"][0],
+                                              style: AppTextStyle.headerStyle
+                                                  .copyWith(
+                                                color: AppColor.appSecColor,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : Material(
+                                          shape: RoundedRectangleBorder(
+                                            side: BorderSide(
+                                              color: AppColor.appMainColor,
+                                              width: 2,
+                                            ),
+                                            borderRadius:
+                                                BorderRadiusDirectional
+                                                    .circular(50),
+                                          ),
+                                          borderOnForeground: true,
+                                          child: Image.file(
+                                            _pickedImg!,
+                                            // fit: BoxFit.fitWidth,
+                                          ),
+                                        ),
                                 ),
                               ),
                             ),
-                          ),
+                            Visibility(
+                              visible: enableEdit,
+                              child: Material(
+                                elevation: 10,
+                                color: AppColor.appSecColor,
+                                shadowColor: AppColor.appMainColor,
+                                type: MaterialType.button,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadiusDirectional.circular(30),
+                                ),
+                                child: IconButton(
+                                  splashRadius: 23,
+                                  splashColor: AppColor.appSecColor,
+                                  onPressed: () {
+                                    pickImageSource(context);
+                                  },
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: AppColor.appMainColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        cDivider(30),
-                        Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadiusDirectional.circular(15),
-                          ),
-                          color: AppColor.appSecColor,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    snapshot.data!["name"],
-                                    style: AppTextStyle.bodyTextStyle,
-                                  ),
-                                ),
-                                cDivider(30),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    snapshot.data!["email"].toString(),
-                                    style: AppTextStyle.bodyTextStyle,
-                                  ),
-                                ),
-                                cDivider(30),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    snapshot.data!["phone"].toString(),
-                                    style: AppTextStyle.bodyTextStyle,
-                                  ),
-                                ),
-                                cDivider(30),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    snapshot.data!["address"].toString(),
-                                    style: AppTextStyle.bodyTextStyle,
-                                  ),
-                                ),
-                              ],
+                      ),
+                    ),
+                    cDivider(30),
+
+                    //----------------------------details-------------------------------------
+
+                    Material(
+                      elevation: 10,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusDirectional.circular(15),
+                      ),
+                      color: AppColor.appSecColor,
+                      shadowColor: AppColor.appMainColor,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 15,
+                        ),
+                        child: Column(
+                          children: [
+                            //----------------------------name-------------------------------------
+
+                            TextFormField(
+                              enabled: enableEdit,
+                              controller: _nameController =
+                                  TextEditingController(
+                                      text: snapshot.data!["name"]),
+                              style: AppTextStyle.smallTextStyle,
+                              decoration: textfilesStyle('Name').copyWith(
+                                filled: false,
+                              ),
+                            ),
+                            cDivider(10),
+
+                            //----------------------------email-------------------------------------
+
+                            TextFormField(
+                              enabled: false,
+                              controller: _emailController =
+                                  TextEditingController(
+                                      text: snapshot.data!["email"]),
+                              style: AppTextStyle.smallTextStyle,
+                              decoration: textfilesStyle('Email').copyWith(
+                                filled: false,
+                              ),
+                            ),
+                            cDivider(10),
+
+                            //----------------------------phone-------------------------------------
+
+                            TextFormField(
+                              enabled: enableEdit,
+                              controller: _phoneController =
+                                  TextEditingController(
+                                      text: snapshot.data!["phone"]),
+                              style: AppTextStyle.smallTextStyle,
+                              decoration: textfilesStyle('Phone').copyWith(
+                                filled: false,
+                              ),
+                            ),
+                            cDivider(10),
+
+                            //----------------------------address-------------------------------------
+
+                            TextFormField(
+                              enabled: enableEdit,
+                              controller: _addressController =
+                                  TextEditingController(
+                                      text: snapshot.data!["address"]),
+                              style: AppTextStyle.smallTextStyle,
+                              decoration: textfilesStyle('Address').copyWith(
+                                filled: false,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    cDivider(15),
+                    //----------------------------edit-------------------------------------
+
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Visibility(
+                            visible: enableEdit,
+                            child: editUpdateButton(
+                              'Update',
+                              15,
+                              Icons.upgrade,
+                              () async {
+                                enableEdit = !enableEdit;
+                                await updateAuthName();
+                                await updateUserInfo();
+                              },
                             ),
                           ),
-                        ),
-                        cDivider(70),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                fullscreenDialog: true,
-                                builder: (_) => EditUserDetails(),
-                              ),
-                            );
-                          },
-                          style: buttonStyle,
-                          child: Text(
-                            'Edit Details',
-                            style: AppTextStyle.bodyTextStyle,
+                          SizedBox(
+                            width: 20,
                           ),
-                        ),
-                      ],
-                    );
-                  }),
+                          editUpdateButton(
+                            (enableEdit == false) ? 'Edit' : 'Cancel',
+                            15,
+                            (enableEdit == false) ? Icons.edit : Icons.close,
+                            () {
+                              setState(() {
+                                enableEdit = !enableEdit;
+                                _pickedImg = null;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    cDivider(50),
+                  ],
+                );
+              },
             ),
           ),
-        ));
+        ),
+      ),
+    );
+  }
+
+  Future<dynamic> pickImageSource(BuildContext context) {
+    return showModalBottomSheet(
+      backgroundColor: AppColor.appSecColor,
+      elevation: 10,
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusDirectional.only(
+          topEnd: Radius.circular(15),
+          topStart: Radius.circular(15),
+        ),
+      ),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: Text(
+                'Camera',
+                style: AppTextStyle.smallTextStyle,
+              ),
+              onTap: () {
+                selectImg(ImageSource.camera);
+              },
+              leading: Icon(
+                Icons.camera,
+                color: AppColor.appMainColor,
+              ),
+            ),
+            ListTile(
+              title: Text(
+                'Gallery',
+                style: AppTextStyle.smallTextStyle,
+              ),
+              onTap: () {
+                selectImg(ImageSource.gallery);
+              },
+              leading: Icon(
+                Icons.image,
+                color: AppColor.appMainColor,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Material editUpdateButton(
+    String label,
+    double radius,
+    IconData icon,
+    VoidCallback onButtontap,
+  ) {
+    return Material(
+      elevation: 10,
+      type: MaterialType.button,
+      color: AppColor.appSecColor,
+      shadowColor: AppColor.appMainColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusDirectional.circular(radius),
+      ),
+      child: TextButton.icon(
+        style: TextButton.styleFrom(
+          primary: AppColor.appMainColor,
+        ),
+        onPressed: onButtontap,
+        icon: Icon(
+          icon,
+          color: AppColor.appMainColor,
+        ),
+        label: Text(
+          label,
+          style: AppTextStyle.smallTextStyle,
+        ),
+      ),
+    );
   }
 
   AppBar appBar(BuildContext context) {
