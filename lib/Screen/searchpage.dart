@@ -97,11 +97,12 @@ class _SearchPageState extends State<SearchPage> {
             return ListView(
               children: [
                 ...snapshot.data!.docs
-                    .where((QueryDocumentSnapshot<Object> element) =>
-                        element["name"]
-                            .toString()
-                            .toLowerCase()
-                            .contains(searchControler.text.toLowerCase()))
+                    .where(
+                  (QueryDocumentSnapshot<Object> element) =>
+                      element["name"].toString().toLowerCase().contains(
+                            searchControler.text.toLowerCase(),
+                          ),
+                )
                     .map(
                   (QueryDocumentSnapshot<Object> data) {
                     final name = data["name"];

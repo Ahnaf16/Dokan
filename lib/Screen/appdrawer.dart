@@ -3,14 +3,19 @@ import 'package:dokan/Screen/Auth/userprofile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:line_icons/line_icons.dart';
 
-class CustomDrawer extends StatelessWidget {
+class CustomDrawer extends StatefulWidget {
   final Function(User?) onlogout;
 
-  CustomDrawer({required this.onlogout});
+  const CustomDrawer({Key? key, required this.onlogout}) : super(key: key);
 
+  @override
+  State<CustomDrawer> createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
   Future<void> logOut() async {
     await FirebaseAuth.instance.signOut();
-    onlogout(null);
+    widget.onlogout(null);
   }
 
   Future getUID() async {
@@ -47,9 +52,11 @@ class CustomDrawer extends StatelessWidget {
                                     onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) => UserDetails(),
+                                        builder: (_) => UserDetails(
+                                          img: '',
+                                        ),
                                       ),
-                                    ),
+                                    ).then((value) => setState(() {})),
                                     child: Align(
                                       alignment: Alignment.center +
                                           const Alignment(0, -1),
