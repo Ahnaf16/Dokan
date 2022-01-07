@@ -5,6 +5,7 @@ import 'package:dokan/Screen/Auth/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
+  //
   final Function(User?) onLogIn;
   LoginPage({required this.onLogIn});
 
