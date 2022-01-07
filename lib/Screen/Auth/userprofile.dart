@@ -3,15 +3,18 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dokan/Properties/export.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserDetails extends StatefulWidget {
-  const UserDetails({Key? key}) : super(key: key);
+  //
+  String img;
 
-//
+  UserDetails({required this.img});
+
   @override
   State<UserDetails> createState() => _UserDetailsState();
 }
@@ -37,6 +40,7 @@ class _UserDetailsState extends State<UserDetails> {
       "email": _emailController!.text,
       "phone": _phoneController!.text,
       "address": _addressController!.text,
+      "dp": _pickedImgStorage,
     }).then(
       (value) => Fluttertoast.showToast(
         msg: 'Update complete',
@@ -51,6 +55,7 @@ class _UserDetailsState extends State<UserDetails> {
     return _currentUser!.updateDisplayName(_nameController!.text);
   }
 
+  //image picker, crop
   Future selectImg(ImageSource imgSource) async {
     try {
       final pickImg = await ImagePicker().pickImage(source: imgSource);
@@ -92,13 +97,60 @@ class _UserDetailsState extends State<UserDetails> {
     }
   }
 
+//upload to firebase storage
+  uploadToStorage() async {
+    if (_pickedImg != null) {
+      final uploadToStorage = await storageRef
+          .child("/UserImg/${_currentUser!.email}")
+          .putFile(_pickedImg!);
+
+      final imgLink = await uploadToStorage.ref.getDownloadURL();
+      setState(
+        () {
+          _pickedImgStorage = imgLink;
+        },
+      );
+    }
+  }
+
+  noup() {
+    storageRef
+        .child("/UserImg/${_currentUser!.email}")
+        .putFile(_pickedImg!)
+        .cancel()
+        .then(
+          (value) => Fluttertoast.showToast(
+            msg: 'No img selected',
+          ),
+        );
+  }
+
+  waitForData() {
+    FirebaseFirestore.instance
+        .collection("UserInfo")
+        .doc(_currentUser!.email)
+        .get()
+        .then((value) => setState(() {
+              noCloudData = false;
+            }));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    waitForData();
+  }
+
+  final User? _currentUser = FirebaseAuth.instance.currentUser!;
+  final Reference storageRef = FirebaseStorage.instance.ref();
   TextEditingController? _nameController;
   TextEditingController? _emailController;
   TextEditingController? _phoneController;
   TextEditingController? _addressController;
-  final User? _currentUser = FirebaseAuth.instance.currentUser!;
   bool enableEdit = false;
+  bool noCloudData = true;
   File? _pickedImg;
+  String? _pickedImgStorage;
 
   @override
   Widget build(BuildContext context) {
@@ -111,8 +163,14 @@ class _UserDetailsState extends State<UserDetails> {
             child: StreamBuilder<DocumentSnapshot>(
               stream: getUserData(),
               builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text(
+                    'Unexpacted Error',
+                    style: AppTextStyle.errorText,
+                  );
+                }
                 if (!snapshot.hasData) {
-                  return CircularProgressIndicator(
+                  return LinearProgressIndicator(
                     color: AppColor.appMainColor,
                   );
                 }
@@ -151,38 +209,59 @@ class _UserDetailsState extends State<UserDetails> {
                                     color: AppColor.appMainColor,
                                     borderRadius: BorderRadius.circular(180),
                                   ),
-                                  child: _pickedImg == null
-                                      ? FittedBox(
+                                  child: noCloudData
+                                      ? Center(
                                           child: Padding(
                                             padding: const EdgeInsets.all(13),
                                             child: Text(
-                                              snapshot.data!["name"][0],
-                                              style: AppTextStyle.headerStyle
+                                              'no data',
+                                              style: AppTextStyle.errorText
                                                   .copyWith(
                                                 color: AppColor.appSecColor,
                                               ),
                                             ),
                                           ),
                                         )
-                                      : Material(
-                                          shape: RoundedRectangleBorder(
-                                            side: BorderSide(
-                                              color: AppColor.appMainColor,
-                                              width: 2,
-                                            ),
-                                            borderRadius:
-                                                BorderRadiusDirectional
-                                                    .circular(50),
-                                          ),
-                                          borderOnForeground: true,
-                                          child: Image.file(
-                                            _pickedImg!,
-                                            // fit: BoxFit.fitWidth,
-                                          ),
+                                      : SizedBox(
+                                          child: snapshot.data!["dp"] == null
+                                              ? FittedBox(
+                                                  child: Text(
+                                                    snapshot.data!["name"][0]
+                                                        .toString()
+                                                        .toUpperCase(),
+                                                    style: TextStyle(
+                                                      color:
+                                                          AppColor.appSecColor,
+                                                    ),
+                                                    //'no img',
+                                                  ),
+                                                )
+                                              : Material(
+                                                  shape: RoundedRectangleBorder(
+                                                    side: BorderSide(
+                                                      color:
+                                                          AppColor.appMainColor,
+                                                      width: 2,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadiusDirectional
+                                                            .circular(50),
+                                                  ),
+                                                  borderOnForeground: true,
+                                                  child: _pickedImg != null
+                                                      ? Image.file(
+                                                          _pickedImg!,
+                                                        )
+                                                      : Image.network(
+                                                          snapshot.data!["dp"],
+                                                        ),
+                                                ),
                                         ),
                                 ),
                               ),
                             ),
+                            //--------------
+
                             Visibility(
                               visible: enableEdit,
                               child: Material(
@@ -303,6 +382,9 @@ class _UserDetailsState extends State<UserDetails> {
                               Icons.upgrade,
                               () async {
                                 enableEdit = !enableEdit;
+                                _pickedImg != null
+                                    ? await uploadToStorage()
+                                    : noup();
                                 await updateAuthName();
                                 await updateUserInfo();
                               },
@@ -327,6 +409,17 @@ class _UserDetailsState extends State<UserDetails> {
                     ),
 
                     cDivider(50),
+                    // SizedBox(
+                    //   height: 300,
+                    //   width: 300,
+                    //   child: snapshot.data!.exists
+                    //       ? Image.network(
+                    //           snapshot.data!["dp"],
+                    //         )
+                    //       : Text(
+                    //           'no data',
+                    //         ),
+                    // ),
                   ],
                 );
               },
@@ -361,6 +454,7 @@ class _UserDetailsState extends State<UserDetails> {
                 style: AppTextStyle.smallTextStyle,
               ),
               onTap: () {
+                Navigator.pop(context);
                 selectImg(ImageSource.camera);
               },
               leading: Icon(
@@ -374,6 +468,7 @@ class _UserDetailsState extends State<UserDetails> {
                 style: AppTextStyle.smallTextStyle,
               ),
               onTap: () {
+                Navigator.pop(context);
                 selectImg(ImageSource.gallery);
               },
               leading: Icon(

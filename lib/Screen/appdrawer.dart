@@ -52,7 +52,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                     onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) => const UserDetails(),
+                                        builder: (_) => UserDetails(
+                                          img: '',
+                                        ),
                                       ),
                                     ).then((value) => setState(() {})),
                                     child: Align(

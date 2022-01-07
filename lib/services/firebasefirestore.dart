@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future sendUserNameDB(userName, userMail, phone, address) async {
+Future sendUserNameDB(userName, userMail, phone, address, userImg) async {
   User? _auth = FirebaseAuth.instance.currentUser;
   await FirebaseFirestore.instance.collection('UserInfo').doc(_auth!.email).set(
     {
@@ -9,6 +9,7 @@ Future sendUserNameDB(userName, userMail, phone, address) async {
       'email': userMail,
       'phone': phone,
       'address': address,
+      'dp': userImg,
     },
   );
 }

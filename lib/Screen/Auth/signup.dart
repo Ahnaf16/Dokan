@@ -50,6 +50,7 @@ class _SignUpPageState extends State<SignUpPage> {
   String? userMail;
   String? phone;
   String? address;
+  String? userImg;
 
   String error = '';
   String password = '';
@@ -202,7 +203,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     if (formkey.currentState!.validate()) {
                       await signUp();
                       sendUserNameDB(_nameController.text,
-                          _emailController.text, phone, address);
+                          _emailController.text, phone, address, userImg);
                     }
                     isloading = false;
                   },
