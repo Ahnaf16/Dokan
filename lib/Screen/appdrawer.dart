@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dokan/Properties/export.dart';
 import 'package:dokan/Screen/Auth/userprofile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +23,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
     return FirebaseAuth.instance.currentUser;
   }
 
+//show user data
+  getUserData() {
+    return FirebaseFirestore.instance
+        .collection("UserInfo")
+        .doc(_currentUser!.email)
+        .snapshots();
+  }
+
+  final User? _currentUser = FirebaseAuth.instance.currentUser!;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -39,22 +50,28 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     children: [
                       Align(
                         alignment: Alignment.bottomCenter,
-                        child: FutureBuilder(
-                          future: getUID(),
-                          builder:
-                              (BuildContext context, AsyncSnapshot snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              final userdata = snapshot.data;
+                        child: StreamBuilder<DocumentSnapshot>(
+                          stream: getUserData(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return const Text(
+                                'Unexpacted Error',
+                                style: AppTextStyle.errorText,
+                              );
+                            }
+                            if (!snapshot.hasData) {
+                              return const LinearProgressIndicator(
+                                color: AppColor.appMainColor,
+                              );
+                            } else {
+                              //final userdata = snapshot.data;
                               return Stack(
                                 children: [
                                   InkWell(
                                     onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) => UserDetails(
-                                          img: '',
-                                        ),
+                                        builder: (_) => UserDetails(),
                                       ),
                                     ).then((value) => setState(() {})),
                                     child: Align(
@@ -63,17 +80,23 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                       child: CircleAvatar(
                                         radius: 50.0,
                                         backgroundColor: AppColor.appMainColor,
-                                        child: Text(
-                                          userdata.displayName == null
-                                              ? 'name'
-                                              : userdata.displayName[0]
-                                                  .toString()
-                                                  .toUpperCase(),
-                                          style:
-                                              AppTextStyle.headerStyle.copyWith(
-                                            color: AppColor.appSecColor,
-                                          ),
-                                        ),
+                                        child: snapshot.data!["dp"] != null
+                                            ? ClipOval(
+                                                child: Image.network(
+                                                  snapshot.data!["dp"],
+                                                ),
+                                              )
+                                            : Text(
+                                                snapshot.data!["name"] == null
+                                                    ? 'D'
+                                                    : snapshot.data!["name"][0]
+                                                        .toString()
+                                                        .toUpperCase(),
+                                                style: AppTextStyle.headerStyle
+                                                    .copyWith(
+                                                  color: AppColor.appSecColor,
+                                                ),
+                                              ),
                                       ),
                                     ),
                                   ),
@@ -89,7 +112,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                     alignment: Alignment.center +
                                         const Alignment(0, .5),
                                     child: Text(
-                                      userdata.displayName ?? 'name',
+                                      snapshot.data!["name"] ?? 'User',
                                       style: AppTextStyle.bodyTextStyle,
                                     ),
                                   ),
@@ -97,14 +120,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                     alignment: Alignment.center +
                                         const Alignment(0, .9),
                                     child: Text(
-                                      userdata.email,
+                                      snapshot.data!["email"] ?? 'Email',
                                       style: AppTextStyle.smallTextStyle,
                                     ),
                                   ),
                                 ],
                               );
-                            } else {
-                              return const Text('error');
                             }
                           },
                         ),

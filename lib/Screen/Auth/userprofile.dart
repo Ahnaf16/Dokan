@@ -11,9 +11,6 @@ import 'package:image_picker/image_picker.dart';
 
 class UserDetails extends StatefulWidget {
   //
-  String img;
-
-  UserDetails({required this.img});
 
   @override
   State<UserDetails> createState() => _UserDetailsState();
