@@ -1,7 +1,7 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, file_names
-
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dokan/Properties/export.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -9,7 +9,8 @@ import 'herotest.dart';
 
 class Details extends StatefulWidget {
   const Details(
-      {required this.pName, required this.pPrice, required this.pImg});
+      {Key? key, required this.pName, required this.pPrice, required this.pImg})
+      : super(key: key);
 
   final String pName;
   final String pPrice;
@@ -20,6 +21,27 @@ class Details extends StatefulWidget {
 }
 
 class _DetailsState extends State<Details> {
+  //
+
+  Future addToCart() async {
+    _fireStore
+        .collection("User_cart")
+        .doc(_user!.email)
+        .collection("items")
+        .doc(widget.pName)
+        .set(
+      {
+        "name": widget.pName,
+        "price": widget.pPrice,
+        "imgs": widget.pImg,
+      },
+    ).then(
+      (value) => Fluttertoast.showToast(msg: 'Added to cart'),
+    );
+  }
+
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  final User? _user = FirebaseAuth.instance.currentUser;
   int dots = 1;
 
   @override
@@ -48,8 +70,8 @@ class _DetailsState extends State<Details> {
               ),
             ),
             cDivider(20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
               child: Text(
                 'Add Discription',
                 style: AppTextStyle.bodyTextStyle,
@@ -85,15 +107,7 @@ class _DetailsState extends State<Details> {
                 ),
               ),
               IconButton(
-                onPressed: () {
-                  Fluttertoast.showToast(
-                    msg: 'Cart has not implemented yet',
-                    backgroundColor: AppColor.appSecColor,
-                    textColor: AppColor.appSecColor,
-                    toastLength: Toast.LENGTH_SHORT,
-                  );
-                  //print('cart');
-                },
+                onPressed: () async => await addToCart(),
                 icon: Icon(
                   Icons.add_shopping_cart,
                   color: AppColor.appSecColor,

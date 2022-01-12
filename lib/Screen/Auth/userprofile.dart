@@ -162,16 +162,16 @@ class _UserDetailsState extends State<UserDetails> {
 
                 //----------------------------conection waiting-------------------------------------
 
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Column(
-                    children: [
-                      loadingHeader(context),
-                      cDivider(30),
-                      loadingBody(context),
-                      cDivider(30),
-                    ],
-                  );
-                }
+                // if (snapshot.connectionState == ConnectionState.waiting) {
+                //   return Column(
+                //     children: [
+                //       loadingHeader(context),
+                //       cDivider(30),
+                //       loadingBody(context),
+                //       cDivider(30),
+                //     ],
+                //   );
+                // }
                 return Column(
                   children: [
                     //----------------------------dp-------------------------------------

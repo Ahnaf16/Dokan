@@ -1,9 +1,6 @@
-// ignore_for_file: prefer_const_constructors, unused_local_variable, avoid_print
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dokan/Screen/detailspage.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../Properties/export.dart';
 
 class Homepage extends StatefulWidget {

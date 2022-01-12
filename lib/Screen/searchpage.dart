@@ -107,15 +107,15 @@ class _SearchPageState extends State<SearchPage> {
                   (QueryDocumentSnapshot<Object> data) {
                     final name = data["name"];
                     final img = data["img"][0];
-                    return Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Container(
-                        //color: AppColor.appSecColor,
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                                color: AppColor.appMainColor, width: 2),
-                          ),
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      color: AppColor.appSecColor,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 0,
+                          vertical: 10,
                         ),
                         child: ListTile(
                           onTap: () => Navigator.push(
@@ -123,13 +123,22 @@ class _SearchPageState extends State<SearchPage> {
                             MaterialPageRoute(
                               builder: (_) => Details(
                                 pName: name,
-                                pPrice: '',
+                                pPrice: data["price"],
                                 pImg: data["img"],
                               ),
                             ),
                           ),
-                          title: Text(name),
-                          leading: Image.network(img),
+                          title: Text(
+                            name,
+                            style: AppTextStyle.smallTextStyle,
+                          ),
+                          leading: Card(
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Image.network(img),
+                          ),
                         ),
                       ),
                     );
