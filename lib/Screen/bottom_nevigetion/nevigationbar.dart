@@ -5,11 +5,12 @@ import 'package:dokan/Screen/searchpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import '../../Properties/export.dart';
+import 'homepage.dart';
 
 class Navibar extends StatefulWidget {
   final Function(User?) onClick;
 
-  const Navibar({required this.onClick});
+  const Navibar({Key? key, required this.onClick}) : super(key: key);
 
   @override
   State<Navibar> createState() => _NavibarState();
@@ -17,8 +18,6 @@ class Navibar extends StatefulWidget {
 
 class _NavibarState extends State<Navibar> {
   var _curentindex = 0;
-
-  int _toggle = 0;
 
   final neviPages = [
     const Homepage(),

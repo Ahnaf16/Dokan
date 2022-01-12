@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dokan/Properties/export.dart';
-import 'package:dokan/Screen/descriotion.dart';
+import 'package:dokan/Screen/detailspage.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);

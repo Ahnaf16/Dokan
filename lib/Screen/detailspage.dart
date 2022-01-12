@@ -1,12 +1,15 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, file_names
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dokan/Properties/export.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import 'herotest.dart';
+
 class Details extends StatefulWidget {
-  Details({required this.pName, required this.pPrice, required this.pImg});
+  const Details(
+      {required this.pName, required this.pPrice, required this.pImg});
 
   final String pName;
   final String pPrice;
@@ -75,7 +78,6 @@ class _DetailsState extends State<Details> {
                     textColor: AppColor.appSecColor,
                     toastLength: Toast.LENGTH_SHORT,
                   );
-                  print('wishlist');
                 },
                 icon: Icon(
                   Icons.favorite_outline,
@@ -90,7 +92,7 @@ class _DetailsState extends State<Details> {
                     textColor: AppColor.appSecColor,
                     toastLength: Toast.LENGTH_SHORT,
                   );
-                  print('cart');
+                  //print('cart');
                 },
                 icon: Icon(
                   Icons.add_shopping_cart,
@@ -122,27 +124,45 @@ class _DetailsState extends State<Details> {
                 enableInfiniteScroll: false,
                 height: 200,
                 viewportFraction: .54,
-                onPageChanged: (index, reason) => setState(() {
-                  dots = index;
-                }),
+                onPageChanged: (index, reason) => setState(
+                  () {
+                    dots = index;
+                  },
+                ),
               ),
               itemBuilder: (context, index, realindex) {
                 return Padding(
                   padding: const EdgeInsets.all(5),
-                  child: Container(
-                    width: 200,
-                    decoration: BoxDecoration(
-                      color: AppColor.appSecColor,
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                        color: AppColor.appMainColor,
-                        width: 2,
-                      ),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          widget.pImg[index],
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => Herotest(
+                            theIMG: widget.pImg[index],
+                            tag: widget.pImg[index].toString(),
+                          ),
                         ),
-                        // fit: BoxFit.fitWidth,
+                      );
+                    },
+                    child: Hero(
+                      tag: widget.pImg[index].toString(),
+                      child: Container(
+                        width: 200,
+                        decoration: BoxDecoration(
+                          color: AppColor.appSecColor,
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: AppColor.appMainColor,
+                            width: 2,
+                          ),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              widget.pImg[index],
+                            ),
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
                       ),
                     ),
                   ),

@@ -71,7 +71,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                     onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) => UserDetails(),
+                                        builder: (_) => UserDetails(
+                                          userName: snapshot.data!["name"][0]
+                                              .toString()
+                                              .toUpperCase(),
+                                        ),
                                       ),
                                     ).then((value) => setState(() {})),
                                     child: Align(
@@ -88,7 +92,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                               )
                                             : Text(
                                                 snapshot.data!["name"] == null
-                                                    ? 'D'
+                                                    ? 'User'
                                                     : snapshot.data!["name"][0]
                                                         .toString()
                                                         .toUpperCase(),

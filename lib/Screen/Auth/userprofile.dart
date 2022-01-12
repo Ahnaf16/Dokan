@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dokan/Properties/export.dart';
+import 'package:dokan/Screen/herotest.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +12,9 @@ import 'package:image_picker/image_picker.dart';
 
 class UserDetails extends StatefulWidget {
   //
+  final String userName;
+
+  const UserDetails({Key? key, required this.userName}) : super(key: key);
 
   @override
   State<UserDetails> createState() => _UserDetailsState();
@@ -96,21 +100,19 @@ class _UserDetailsState extends State<UserDetails> {
 
 //upload to firebase storage
   uploadToStorage() async {
-    if (_pickedImg != null) {
-      final uploadToStorage = await storageRef
-          .child("/UserImg/${_currentUser!.email}")
-          .putFile(_pickedImg!);
+    final uploadToStorage = await storageRef
+        .child("/UserImg/${_currentUser!.email}")
+        .putFile(_pickedImg!);
 
-      final imgLink = await uploadToStorage.ref.getDownloadURL();
-      setState(
-        () {
-          _pickedImgStorage = imgLink;
-        },
-      );
-    }
+    final imgLink = await uploadToStorage.ref.getDownloadURL();
+    setState(
+      () {
+        _pickedImgStorage = imgLink;
+      },
+    );
   }
 
-  noup() {
+  cancelUplode() {
     storageRef
         .child("/UserImg/${_currentUser!.email}")
         .putFile(_pickedImg!)
@@ -122,22 +124,6 @@ class _UserDetailsState extends State<UserDetails> {
         );
   }
 
-  waitForData() {
-    FirebaseFirestore.instance
-        .collection("UserInfo")
-        .doc(_currentUser!.email)
-        .get()
-        .then((value) => setState(() {
-              noCloudData = false;
-            }));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    waitForData();
-  }
-
   final User? _currentUser = FirebaseAuth.instance.currentUser!;
   final Reference storageRef = FirebaseStorage.instance.ref();
   TextEditingController? _nameController;
@@ -145,7 +131,7 @@ class _UserDetailsState extends State<UserDetails> {
   TextEditingController? _phoneController;
   TextEditingController? _addressController;
   bool enableEdit = false;
-  bool noCloudData = true;
+  bool isloading = false;
   File? _pickedImg;
   String? _pickedImgStorage;
 
@@ -157,6 +143,7 @@ class _UserDetailsState extends State<UserDetails> {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
+            //
             child: StreamBuilder<DocumentSnapshot>(
               stream: getUserData(),
               builder: (context, snapshot) {
@@ -167,14 +154,26 @@ class _UserDetailsState extends State<UserDetails> {
                   );
                 }
                 if (!snapshot.hasData) {
-                  return LinearProgressIndicator(
-                    color: AppColor.appMainColor,
+                  return Text(
+                    'Error loading data',
+                    style: AppTextStyle.errorText,
+                  );
+                }
+
+                //----------------------------conection waiting-------------------------------------
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Column(
+                    children: [
+                      loadingHeader(context),
+                      cDivider(30),
+                      loadingBody(context),
+                      cDivider(30),
+                    ],
                   );
                 }
                 return Column(
                   children: [
-                    cDivider(20),
-
                     //----------------------------dp-------------------------------------
 
                     Material(
@@ -192,7 +191,12 @@ class _UserDetailsState extends State<UserDetails> {
                           children: [
                             Material(
                               elevation: 10,
+                              borderOnForeground: true,
                               shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: AppColor.appMainColor,
+                                  width: 2,
+                                ),
                                 borderRadius:
                                     BorderRadiusDirectional.circular(50),
                               ),
@@ -206,54 +210,62 @@ class _UserDetailsState extends State<UserDetails> {
                                     color: AppColor.appMainColor,
                                     borderRadius: BorderRadius.circular(180),
                                   ),
-                                  child: noCloudData
-                                      ? Center(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(13),
-                                            child: Text(
-                                              'no data',
-                                              style: AppTextStyle.errorText
-                                                  .copyWith(
-                                                color: AppColor.appSecColor,
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      : SizedBox(
-                                          child: snapshot.data!["dp"] == null
-                                              ? FittedBox(
-                                                  child: Text(
-                                                    snapshot.data!["name"][0]
-                                                        .toString()
-                                                        .toUpperCase(),
-                                                    style: TextStyle(
-                                                      color:
-                                                          AppColor.appSecColor,
-                                                    ),
-                                                    //'no img',
-                                                  ),
-                                                )
-                                              : Material(
-                                                  shape: RoundedRectangleBorder(
-                                                    side: BorderSide(
-                                                      color:
-                                                          AppColor.appMainColor,
-                                                      width: 2,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadiusDirectional
-                                                            .circular(50),
-                                                  ),
-                                                  borderOnForeground: true,
-                                                  child: _pickedImg != null
-                                                      ? Image.file(
-                                                          _pickedImg!,
-                                                        )
-                                                      : Image.network(
-                                                          snapshot.data!["dp"],
+                                  child: SizedBox(
+                                    child: _pickedImg != null
+                                        ? CircleAvatar(
+                                            child: Image.file(
+                                            _pickedImg!,
+                                          ))
+                                        : Container(
+                                            child: snapshot.data!["dp"] != null
+                                                ? GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              Herotest(
+                                                            theIMG: snapshot
+                                                                .data!["dp"],
+                                                            tag: snapshot
+                                                                .data!["email"],
+                                                          ),
                                                         ),
-                                                ),
-                                        ),
+                                                      );
+                                                    },
+                                                    child: Hero(
+                                                      tag: snapshot
+                                                          .data!["email"],
+                                                      child: CircleAvatar(
+                                                        child:
+                                                            _pickedImg != null
+                                                                ? Image.file(
+                                                                    _pickedImg!,
+                                                                  )
+                                                                : Image.network(
+                                                                    snapshot.data![
+                                                                        "dp"],
+                                                                  ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                : CircleAvatar(
+                                                    backgroundColor:
+                                                        AppColor.appMainColor,
+                                                    child: Text(
+                                                      snapshot.data!["name"][0]
+                                                          .toString()
+                                                          .toUpperCase(),
+                                                      style: AppTextStyle
+                                                          .headerStyle
+                                                          .copyWith(
+                                                        color: AppColor
+                                                            .appSecColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                          ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -378,12 +390,12 @@ class _UserDetailsState extends State<UserDetails> {
                               15,
                               Icons.upgrade,
                               () async {
-                                enableEdit = !enableEdit;
-                                _pickedImg != null
-                                    ? await uploadToStorage()
-                                    : noup();
+                                await uploadToStorage();
                                 await updateAuthName();
                                 await updateUserInfo();
+                                setState(() {
+                                  enableEdit = !enableEdit;
+                                });
                               },
                             ),
                           ),
@@ -391,10 +403,13 @@ class _UserDetailsState extends State<UserDetails> {
                             width: 20,
                           ),
                           editUpdateButton(
-                            (enableEdit == false) ? 'Edit' : 'Cancel',
+                            enableEdit == false ? 'Edit' : 'Cancel',
                             15,
-                            (enableEdit == false) ? Icons.edit : Icons.close,
+                            enableEdit == false ? Icons.edit : Icons.close,
                             () {
+                              (enableEdit == true && _pickedImg != null)
+                                  ? cancelUplode()
+                                  : null;
                               setState(() {
                                 enableEdit = !enableEdit;
                                 _pickedImg = null;
@@ -406,20 +421,93 @@ class _UserDetailsState extends State<UserDetails> {
                     ),
 
                     cDivider(50),
-                    // SizedBox(
-                    //   height: 300,
-                    //   width: 300,
-                    //   child: snapshot.data!.exists
-                    //       ? Image.network(
-                    //           snapshot.data!["dp"],
-                    //         )
-                    //       : Text(
-                    //           'no data',
-                    //         ),
-                    // ),
                   ],
                 );
               },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  SizedBox loadingBody(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Material(
+        elevation: 0,
+        color: Colors.grey[300],
+        shadowColor: AppColor.appMainColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusDirectional.circular(15),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            children: [
+              Container(
+                height: 45,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              cDivider(20),
+              Container(
+                height: 45,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              cDivider(20),
+              Container(
+                height: 45,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              cDivider(20),
+              Container(
+                height: 45,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  SizedBox loadingHeader(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Material(
+        elevation: 0,
+        color: Colors.grey[300],
+        shadowColor: AppColor.appMainColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusDirectional.circular(15),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(
+                color: Colors.grey[400],
+                shape: BoxShape.circle,
+              ),
             ),
           ),
         ),
@@ -479,34 +567,40 @@ class _UserDetailsState extends State<UserDetails> {
     );
   }
 
-  Material editUpdateButton(
+  Widget editUpdateButton(
     String label,
     double radius,
     IconData icon,
     VoidCallback onButtontap,
   ) {
-    return Material(
-      elevation: 10,
-      type: MaterialType.button,
-      color: AppColor.appSecColor,
-      shadowColor: AppColor.appMainColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadiusDirectional.circular(radius),
-      ),
-      child: TextButton.icon(
-        style: TextButton.styleFrom(
-          primary: AppColor.appMainColor,
-        ),
-        onPressed: onButtontap,
-        icon: Icon(
-          icon,
-          color: AppColor.appMainColor,
-        ),
-        label: Text(
-          label,
-          style: AppTextStyle.smallTextStyle,
+    return OutlinedButton(
+      style: TextButton.styleFrom(
+        primary: AppColor.appMainColor,
+        backgroundColor: AppColor.appSecColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
+      onPressed: onButtontap,
+      child: isloading
+          ? CircularProgressIndicator(
+              color: AppColor.appMainColor,
+            )
+          : Row(
+              children: [
+                Icon(
+                  icon,
+                  color: AppColor.appMainColor,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  label,
+                  style: AppTextStyle.smallTextStyle,
+                ),
+              ],
+            ),
     );
   }
 

@@ -2,7 +2,7 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dokan/Screen/descriotion.dart';
+import 'package:dokan/Screen/detailspage.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../Properties/export.dart';
 
@@ -28,6 +28,7 @@ class _HomepageState extends State<Homepage> {
     return qn.docs;
   }
 
+  bool loading = false;
   int dotPosition = 0;
 
   @override
@@ -36,16 +37,13 @@ class _HomepageState extends State<Homepage> {
       backgroundColor: AppColor.appBackground,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                imgSlider(),
-                cDivider(30),
-                productList(),
-              ],
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              imgSlider(),
+              cDivider(30),
+              productList(),
+            ],
           ),
         ),
       ),
@@ -60,21 +58,28 @@ class _HomepageState extends State<Homepage> {
       ),
       elevation: 15,
       child: FutureBuilder(
-        future: getSliderImg(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: AppColor.appMainColor,
-              ),
-            );
-          }
-          if (snapshot.hasError) {
-            return Text('Error loadimg data');
-          }
-          if (snapshot.connectionState == ConnectionState.none) {
-            return Text('No network');
-          } else {
+          future: getSliderImg(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            //
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container(
+                height: 200,
+                color: Colors.grey[300],
+                child: Center(
+                  child: Container(
+                    height: 150,
+                    width: 400,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[400],
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                ),
+              );
+            }
+            if (snapshot.hasError) {
+              return Text('Error loadimg data');
+            }
             return Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 5,
@@ -89,7 +94,6 @@ class _HomepageState extends State<Homepage> {
                       autoPlay: true,
                       enlargeCenterPage: true,
                       viewportFraction: .8,
-                      onPageChanged: (index, reason) => dotPosition = index,
                     ),
                     itemBuilder: (context, index, realIndex) {
                       DocumentSnapshot data = snapshot.data[index];
@@ -111,23 +115,10 @@ class _HomepageState extends State<Homepage> {
                       );
                     },
                   ),
-                  cDivider(15),
-                  AnimatedSmoothIndicator(
-                    activeIndex: dotPosition,
-                    count: snapshot.data.length,
-                    effect: const SwapEffect(
-                      activeDotColor: AppColor.appMainColor,
-                      dotColor: Colors.grey,
-                      dotHeight: 10,
-                      dotWidth: 10,
-                    ),
-                  ),
                 ],
               ),
             );
-          }
-        },
-      ),
+          }),
     );
   }
 
@@ -157,10 +148,35 @@ class _HomepageState extends State<Homepage> {
             child: FutureBuilder(
               future: getProdacts(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
+                //
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColor.appMainColor,
+                  return Container(
+                    height: 300,
+                    color: Colors.grey[300],
+                    child: Center(
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 200,
+                            width: 200,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            height: 200,
+                            width: 200,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 } else {
