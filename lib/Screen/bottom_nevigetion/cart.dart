@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dokan/Properties/export.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../detailspage.dart';
 
@@ -39,7 +40,7 @@ class _CartState extends State<Cart> {
                 ),
               );
             }
-            if (_fireStore.collection("User_cart").doc() != _user!.email) {
+            if (!snapshot.hasData) {
               return const Center(
                 child: Text(
                   'No Cart Item',
@@ -60,38 +61,50 @@ class _CartState extends State<Cart> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       color: AppColor.appSecColor,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 0,
-                          vertical: 10,
+                      child: ListTile(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => Details(
+                              pName: _docs["name"],
+                              pPrice: _docs["price"],
+                              pImg: _docs["imgs"],
+                            ),
+                          ),
                         ),
-                        child: ListTile(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => Details(
-                                pName: _docs["name"],
-                                pPrice: _docs["price"],
-                                pImg: _docs["imgs"],
-                              ),
-                            ),
+                        leading: Card(
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          leading: Card(
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Image.network(
-                              _docs["imgs"][0],
-                            ),
+                          child: Image.network(
+                            _docs["imgs"][0],
                           ),
-                          title: Text(
-                            _docs["name"],
-                            style: AppTextStyle.smallTextStyle,
-                          ),
-                          trailing: Text(
-                            _docs["price"],
-                            style: AppTextStyle.smallTextStyle,
+                        ),
+                        title: Text(
+                          _docs["name"],
+                          style: AppTextStyle.smallTextStyle,
+                        ),
+                        subtitle: Text(
+                          _docs["price"],
+                          style: AppTextStyle.smallTextStyle,
+                        ),
+                        trailing: IconButton(
+                          onPressed: () {
+                            _fireStore
+                                .collection("User_cart")
+                                .doc(_user!.email)
+                                .collection("items")
+                                .doc(_docs.id)
+                                .delete()
+                                .then(
+                                  (value) =>
+                                      Fluttertoast.showToast(msg: 'Removed'),
+                                );
+                          },
+                          icon: const Icon(
+                            Icons.remove,
+                            color: AppColor.appMainColor,
                           ),
                         ),
                       ),

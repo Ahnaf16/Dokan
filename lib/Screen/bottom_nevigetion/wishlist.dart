@@ -11,7 +11,7 @@ class Wishlist extends StatefulWidget {
 
 class _WishlistState extends State<Wishlist> {
   //
-
+  bool tapped = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +27,26 @@ class _WishlistState extends State<Wishlist> {
                   style: AppTextStyle.bodyTextStyle,
                 ),
                 //.............................
+                cDivider(30),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Card(
+                    color: AppColor.appSecColor,
+                    child: AnimatedContainer(
+                        duration: Duration(milliseconds: 500),
+                        width: tapped ? 10 : MediaQuery.of(context).size.width,
+                        child: ListTile(
+                          trailing: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                tapped = !tapped;
+                              });
+                            },
+                            icon: Icon(Icons.remove),
+                          ),
+                        )),
+                  ),
+                )
               ],
             ),
           ),

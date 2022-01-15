@@ -213,12 +213,12 @@ class _DetailsState extends State<Details> {
       automaticallyImplyLeading: false,
       leading: IconButton(
         onPressed: () => Navigator.pop(context),
-        icon: Icon(
+        icon: const Icon(
           Icons.arrow_back,
           color: AppColor.appMainColor,
         ),
       ),
-      title: Text(
+      title: const Text(
         'Dokan',
         style: AppTextStyle.bodyTextStyle,
       ),
@@ -229,10 +229,10 @@ class _DetailsState extends State<Details> {
             context,
             MaterialPageRoute(
               fullscreenDialog: true,
-              builder: (context) => SearchPage(),
+              builder: (context) => const SearchPage(),
             ),
           ),
-          icon: Icon(
+          icon: const Icon(
             Icons.search,
             color: AppColor.appMainColor,
           ),

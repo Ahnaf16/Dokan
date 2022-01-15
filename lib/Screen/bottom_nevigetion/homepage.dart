@@ -75,7 +75,10 @@ class _HomepageState extends State<Homepage> {
               );
             }
             if (snapshot.hasError) {
-              return Text('Error loadimg data');
+              return const Text('Error loadimg data');
+            }
+            if (!snapshot.hasData) {
+              return const Text('Unable to fetch data');
             }
             return Padding(
               padding: const EdgeInsets.symmetric(
@@ -130,8 +133,8 @@ class _HomepageState extends State<Homepage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
+          const Padding(
+            padding: EdgeInsets.symmetric(
               horizontal: 15,
               vertical: 10,
             ),
@@ -161,7 +164,7 @@ class _HomepageState extends State<Homepage> {
                               borderRadius: BorderRadius.circular(15),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Container(
